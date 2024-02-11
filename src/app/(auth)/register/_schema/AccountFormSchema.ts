@@ -1,13 +1,9 @@
 import { z } from 'zod'
-import { ACCOUNT_FIELDS } from '@/lib/constants'
+import { ACCOUNT_FIELDS, CUSTOM_FIELDS } from '@/lib/constants'
 import { passwordStrength } from 'check-password-strength'
 
 import { simplify, manualFetchGraphQL } from '@/lib/utils'
-import {
-    CheckEmailExistsQuery,
-    CheckEmailExistsQueryVariables,
-} from '@/graphql/types'
-import { CheckEmailExists } from '@/graphql/queries/CheckEmailExists'
+import { CheckEmailExists } from '@/graphql/queries'
 
 export const AccountFieldsSchema = z
     .object({
@@ -25,11 +21,8 @@ export const AccountFieldsSchema = z
             .min(1, 'Please enter your personal email address')
             .email('Please enter a valid email')
             .refine(async value => {
-                const data = await manualFetchGraphQL<
-                    CheckEmailExistsQuery,
-                    CheckEmailExistsQueryVariables
-                >(CheckEmailExists, {
-                    filters: { email: { eq: value } },
+                const data = await manualFetchGraphQL(CheckEmailExists, {
+                    email: value,
                 })
                 const { usersPermissionsUsers } = simplify(data)
                 return usersPermissionsUsers?.length === 0 ? true : false
@@ -42,6 +35,7 @@ export const AccountFieldsSchema = z
             .string()
             .trim()
             .min(1, 'Please confirm your password'),
+        [`${CUSTOM_FIELDS.PASSWORD_STRENGTH}`]: z.string(),
     })
     .superRefine(({ confirmPassword, password }, ctx) => {
         if (confirmPassword !== password) {
@@ -53,7 +47,7 @@ export const AccountFieldsSchema = z
         }
         ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            path: [`${ACCOUNT_FIELDS.PASSWORD}`, 'passwordStrength'],
+            path: [`${CUSTOM_FIELDS.PASSWORD_STRENGTH}`],
             message: JSON.stringify(passwordStrength(password)),
         })
     })

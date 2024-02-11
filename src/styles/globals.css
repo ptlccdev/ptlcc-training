@@ -6,4 +6,11 @@
     .debug {
         border: 1px solid red;
     }
+    .debugWhite {
+        border: 1px solid white;
+    }
+}
+
+html {
+    overscroll-behavior: none;
 }

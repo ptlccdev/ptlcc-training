@@ -80,14 +80,14 @@ const RegistrationStepper = () => {
     // =============================================================================================
 
     return (
-        <div className='flex h-full w-10/12 flex-col items-center justify-between'>
+        <div className='flex h-full w-10/12 flex-col items-center justify-start md:justify-between'>
             <Steppper
                 state={state}
                 stepsProps={stepsProps}
                 stepperProps={stepperProps}
                 setStep={setStep}
             />
-            <div className='my-6 h-full w-full'>{activeForm}</div>
+            <div className='my-6 w-full md:h-full'>{activeForm}</div>
             <StepperButtonNav
                 state={state}
                 formIsInvalid={!isValid}

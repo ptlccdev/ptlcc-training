@@ -1,16 +1,166 @@
-# The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+input UsersPermissionsRegisterInput {
+    username: String!
+    email: String!
+    password: String!
+    data: ParticipantInput
+}
+
+type Mutation {
+    customRegister(
+        input: UsersPermissionsRegisterInput!
+    ): UsersPermissionsLoginPayload!
+    createParticipant(data: ParticipantInput!): ParticipantEntityResponse
+    updateParticipant(
+        id: ID!
+        data: ParticipantInput!
+    ): ParticipantEntityResponse
+    deleteParticipant(id: ID!): ParticipantEntityResponse
+    createTraining(data: TrainingInput!): TrainingEntityResponse
+    updateTraining(id: ID!, data: TrainingInput!): TrainingEntityResponse
+    deleteTraining(id: ID!): TrainingEntityResponse
+    createUploadFile(data: UploadFileInput!): UploadFileEntityResponse
+    updateUploadFile(id: ID!, data: UploadFileInput!): UploadFileEntityResponse
+    deleteUploadFile(id: ID!): UploadFileEntityResponse
+    createUploadFolder(data: UploadFolderInput!): UploadFolderEntityResponse
+    updateUploadFolder(
+        id: ID!
+        data: UploadFolderInput!
+    ): UploadFolderEntityResponse
+    deleteUploadFolder(id: ID!): UploadFolderEntityResponse
+    createContentReleasesRelease(
+        data: ContentReleasesReleaseInput!
+    ): ContentReleasesReleaseEntityResponse
+    updateContentReleasesRelease(
+        id: ID!
+        data: ContentReleasesReleaseInput!
+    ): ContentReleasesReleaseEntityResponse
+    deleteContentReleasesRelease(id: ID!): ContentReleasesReleaseEntityResponse
+    createContentReleasesReleaseAction(
+        data: ContentReleasesReleaseActionInput!
+    ): ContentReleasesReleaseActionEntityResponse
+    updateContentReleasesReleaseAction(
+        id: ID!
+        data: ContentReleasesReleaseActionInput!
+    ): ContentReleasesReleaseActionEntityResponse
+    deleteContentReleasesReleaseAction(
+        id: ID!
+    ): ContentReleasesReleaseActionEntityResponse
+    upload(
+        refId: ID
+        ref: String
+        field: String
+        info: FileInfoInput
+        file: Upload!
+    ): UploadFileEntityResponse!
+    multipleUpload(
+        refId: ID
+        ref: String
+        field: String
+        files: [Upload]!
+    ): [UploadFileEntityResponse]!
+    updateFileInfo(id: ID!, info: FileInfoInput): UploadFileEntityResponse!
+    removeFile(id: ID!): UploadFileEntityResponse
+
+    """
+    Create a new role
+    """
+    createUsersPermissionsRole(
+        data: UsersPermissionsRoleInput!
+    ): UsersPermissionsCreateRolePayload
+
+    """
+    Update an existing role
+    """
+    updateUsersPermissionsRole(
+        id: ID!
+        data: UsersPermissionsRoleInput!
+    ): UsersPermissionsUpdateRolePayload
+
+    """
+    Delete an existing role
+    """
+    deleteUsersPermissionsRole(id: ID!): UsersPermissionsDeleteRolePayload
+
+    """
+    Create a new user
+    """
+    createUsersPermissionsUser(
+        data: UsersPermissionsUserInput!
+    ): UsersPermissionsUserEntityResponse!
+
+    """
+    Update an existing user
+    """
+    updateUsersPermissionsUser(
+        id: ID!
+        data: UsersPermissionsUserInput!
+    ): UsersPermissionsUserEntityResponse!
+
+    """
+    Delete an existing user
+    """
+    deleteUsersPermissionsUser(id: ID!): UsersPermissionsUserEntityResponse!
+    login(input: UsersPermissionsLoginInput!): UsersPermissionsLoginPayload!
+
+    """
+    Register a user
+    """
+    register(
+        input: UsersPermissionsRegisterInput!
+    ): UsersPermissionsLoginPayload!
+
+    """
+    Request a reset password token
+    """
+    forgotPassword(email: String!): UsersPermissionsPasswordPayload
+
+    """
+    Reset user password. Confirm with a code (resetToken from forgotPassword)
+    """
+    resetPassword(
+        password: String!
+        passwordConfirmation: String!
+        code: String!
+    ): UsersPermissionsLoginPayload
+
+    """
+    Change user password. Confirm with the current password.
+    """
+    changePassword(
+        currentPassword: String!
+        password: String!
+        passwordConfirmation: String!
+    ): UsersPermissionsLoginPayload
+
+    """
+    Confirm an email users email address
+    """
+    emailConfirmation(confirmation: String!): UsersPermissionsLoginPayload
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
 scalar JSON
 
-# A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
 scalar DateTime
 
-# A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
 scalar Date
 
-# The `BigInt` scalar type represents non-fractional signed whole numeric values.
+"""
+The `BigInt` scalar type represents non-fractional signed whole numeric values.
+"""
 scalar Long
 
-# The `Upload` scalar type represents a file upload.
+"""
+The `Upload` scalar type represents a file upload.
+"""
 scalar Upload
 
 type Pagination {
@@ -319,9 +469,9 @@ type ComponentCommonTrainingItems {
 input ComponentParticipantJobInformationFiltersInput {
     titlePosition: StringFilterInput
     company: StringFilterInput
-    workPhone: LongFilterInput
     workEmail: StringFilterInput
     workAddress: ComponentCommonAddressFiltersInput
+    workPhone: StringFilterInput
     and: [ComponentParticipantJobInformationFiltersInput]
     or: [ComponentParticipantJobInformationFiltersInput]
     not: ComponentParticipantJobInformationFiltersInput
@@ -331,18 +481,18 @@ input ComponentParticipantJobInformationInput {
     id: ID
     titlePosition: String
     company: String
-    workPhone: Long
     workEmail: String
     workAddress: ComponentCommonAddressInput
+    workPhone: String
 }
 
 type ComponentParticipantJobInformation {
     id: ID!
     titlePosition: String
     company: String
-    workPhone: Long
     workEmail: String
     workAddress: ComponentCommonAddress
+    workPhone: String
 }
 
 enum ENUM_COMPONENTPARTICIPANTPERSONALDETAILS_GENDER {
@@ -355,10 +505,10 @@ input ComponentParticipantPersonalDetailsFiltersInput {
     lastName: StringFilterInput
     fullName: StringFilterInput
     gender: StringFilterInput
-    dateOfBirth: DateFilterInput
-    phoneNumber: LongFilterInput
-    homeNumber: LongFilterInput
+    dob: DateFilterInput
     residentialAddress: ComponentCommonAddressFiltersInput
+    homeNumber: StringFilterInput
+    phoneNumber: StringFilterInput
     and: [ComponentParticipantPersonalDetailsFiltersInput]
     or: [ComponentParticipantPersonalDetailsFiltersInput]
     not: ComponentParticipantPersonalDetailsFiltersInput
@@ -370,10 +520,10 @@ input ComponentParticipantPersonalDetailsInput {
     lastName: String
     fullName: String
     gender: ENUM_COMPONENTPARTICIPANTPERSONALDETAILS_GENDER
-    dateOfBirth: Date
-    phoneNumber: Long
-    homeNumber: Long
+    dob: Date
     residentialAddress: ComponentCommonAddressInput
+    homeNumber: String
+    phoneNumber: String
 }
 
 type ComponentParticipantPersonalDetails {
@@ -382,10 +532,10 @@ type ComponentParticipantPersonalDetails {
     lastName: String
     fullName: String
     gender: ENUM_COMPONENTPARTICIPANTPERSONALDETAILS_GENDER
-    dateOfBirth: Date
-    phoneNumber: Long
-    homeNumber: Long
+    dob: Date
     residentialAddress: ComponentCommonAddress
+    homeNumber: String
+    phoneNumber: String
 }
 
 input ParticipantFiltersInput {
@@ -937,12 +1087,6 @@ type UsersPermissionsMeRole {
     type: String
 }
 
-input UsersPermissionsRegisterInput {
-    username: String!
-    email: String!
-    password: String!
-}
-
 input UsersPermissionsLoginInput {
     identifier: String!
     password: String!
@@ -1035,112 +1179,4 @@ type Query {
         sort: [String] = []
     ): UsersPermissionsUserEntityResponseCollection
     me: UsersPermissionsMe
-}
-
-type Mutation {
-    createParticipant(data: ParticipantInput!): ParticipantEntityResponse
-    updateParticipant(
-        id: ID!
-        data: ParticipantInput!
-    ): ParticipantEntityResponse
-    deleteParticipant(id: ID!): ParticipantEntityResponse
-    createTraining(data: TrainingInput!): TrainingEntityResponse
-    updateTraining(id: ID!, data: TrainingInput!): TrainingEntityResponse
-    deleteTraining(id: ID!): TrainingEntityResponse
-    createUploadFile(data: UploadFileInput!): UploadFileEntityResponse
-    updateUploadFile(id: ID!, data: UploadFileInput!): UploadFileEntityResponse
-    deleteUploadFile(id: ID!): UploadFileEntityResponse
-    createUploadFolder(data: UploadFolderInput!): UploadFolderEntityResponse
-    updateUploadFolder(
-        id: ID!
-        data: UploadFolderInput!
-    ): UploadFolderEntityResponse
-    deleteUploadFolder(id: ID!): UploadFolderEntityResponse
-    createContentReleasesRelease(
-        data: ContentReleasesReleaseInput!
-    ): ContentReleasesReleaseEntityResponse
-    updateContentReleasesRelease(
-        id: ID!
-        data: ContentReleasesReleaseInput!
-    ): ContentReleasesReleaseEntityResponse
-    deleteContentReleasesRelease(id: ID!): ContentReleasesReleaseEntityResponse
-    createContentReleasesReleaseAction(
-        data: ContentReleasesReleaseActionInput!
-    ): ContentReleasesReleaseActionEntityResponse
-    updateContentReleasesReleaseAction(
-        id: ID!
-        data: ContentReleasesReleaseActionInput!
-    ): ContentReleasesReleaseActionEntityResponse
-    deleteContentReleasesReleaseAction(
-        id: ID!
-    ): ContentReleasesReleaseActionEntityResponse
-    upload(
-        refId: ID
-        ref: String
-        field: String
-        info: FileInfoInput
-        file: Upload!
-    ): UploadFileEntityResponse!
-    multipleUpload(
-        refId: ID
-        ref: String
-        field: String
-        files: [Upload]!
-    ): [UploadFileEntityResponse]!
-    updateFileInfo(id: ID!, info: FileInfoInput): UploadFileEntityResponse!
-    removeFile(id: ID!): UploadFileEntityResponse
-
-    # Create a new role
-    createUsersPermissionsRole(
-        data: UsersPermissionsRoleInput!
-    ): UsersPermissionsCreateRolePayload
-
-    # Update an existing role
-    updateUsersPermissionsRole(
-        id: ID!
-        data: UsersPermissionsRoleInput!
-    ): UsersPermissionsUpdateRolePayload
-
-    # Delete an existing role
-    deleteUsersPermissionsRole(id: ID!): UsersPermissionsDeleteRolePayload
-
-    # Create a new user
-    createUsersPermissionsUser(
-        data: UsersPermissionsUserInput!
-    ): UsersPermissionsUserEntityResponse!
-
-    # Update an existing user
-    updateUsersPermissionsUser(
-        id: ID!
-        data: UsersPermissionsUserInput!
-    ): UsersPermissionsUserEntityResponse!
-
-    # Delete an existing user
-    deleteUsersPermissionsUser(id: ID!): UsersPermissionsUserEntityResponse!
-    login(input: UsersPermissionsLoginInput!): UsersPermissionsLoginPayload!
-
-    # Register a user
-    register(
-        input: UsersPermissionsRegisterInput!
-    ): UsersPermissionsLoginPayload!
-
-    # Request a reset password token
-    forgotPassword(email: String!): UsersPermissionsPasswordPayload
-
-    # Reset user password. Confirm with a code (resetToken from forgotPassword)
-    resetPassword(
-        password: String!
-        passwordConfirmation: String!
-        code: String!
-    ): UsersPermissionsLoginPayload
-
-    # Change user password. Confirm with the current password.
-    changePassword(
-        currentPassword: String!
-        password: String!
-        passwordConfirmation: String!
-    ): UsersPermissionsLoginPayload
-
-    # Confirm an email users email address
-    emailConfirmation(confirmation: String!): UsersPermissionsLoginPayload
 }

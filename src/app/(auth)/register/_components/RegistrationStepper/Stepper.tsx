@@ -32,6 +32,7 @@ const Stepper = ({
             return
         }
 
+        // if (index < state.currentStep) {
         if (DEV || index < state.currentStep) {
             setStep(index)
             return

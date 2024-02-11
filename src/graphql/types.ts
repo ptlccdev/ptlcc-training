@@ -1,3 +1,5 @@
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -5,6 +7,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -12,10 +15,15 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  /** A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
   Date: { input: any; output: any; }
+  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
   DateTime: { input: any; output: any; }
+  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: { input: any; output: any; }
+  /** The `BigInt` scalar type represents non-fractional signed whole numeric values. */
   Long: { input: any; output: any; }
+  /** The `Upload` scalar type represents a file upload. */
   Upload: { input: any; output: any; }
 };
 
@@ -101,7 +109,7 @@ export type ComponentParticipantJobInformation = {
   titlePosition?: Maybe<Scalars['String']['output']>;
   workAddress?: Maybe<ComponentCommonAddress>;
   workEmail?: Maybe<Scalars['String']['output']>;
-  workPhone?: Maybe<Scalars['Long']['output']>;
+  workPhone?: Maybe<Scalars['String']['output']>;
 };
 
 export type ComponentParticipantJobInformationFiltersInput = {
@@ -112,7 +120,7 @@ export type ComponentParticipantJobInformationFiltersInput = {
   titlePosition?: InputMaybe<StringFilterInput>;
   workAddress?: InputMaybe<ComponentCommonAddressFiltersInput>;
   workEmail?: InputMaybe<StringFilterInput>;
-  workPhone?: InputMaybe<LongFilterInput>;
+  workPhone?: InputMaybe<StringFilterInput>;
 };
 
 export type ComponentParticipantJobInformationInput = {
@@ -121,45 +129,45 @@ export type ComponentParticipantJobInformationInput = {
   titlePosition?: InputMaybe<Scalars['String']['input']>;
   workAddress?: InputMaybe<ComponentCommonAddressInput>;
   workEmail?: InputMaybe<Scalars['String']['input']>;
-  workPhone?: InputMaybe<Scalars['Long']['input']>;
+  workPhone?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ComponentParticipantPersonalDetails = {
   __typename?: 'ComponentParticipantPersonalDetails';
-  dateOfBirth?: Maybe<Scalars['Date']['output']>;
+  dob?: Maybe<Scalars['Date']['output']>;
   firstName?: Maybe<Scalars['String']['output']>;
   fullName?: Maybe<Scalars['String']['output']>;
   gender?: Maybe<Enum_Componentparticipantpersonaldetails_Gender>;
-  homeNumber?: Maybe<Scalars['Long']['output']>;
+  homeNumber?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   lastName?: Maybe<Scalars['String']['output']>;
-  phoneNumber?: Maybe<Scalars['Long']['output']>;
+  phoneNumber?: Maybe<Scalars['String']['output']>;
   residentialAddress?: Maybe<ComponentCommonAddress>;
 };
 
 export type ComponentParticipantPersonalDetailsFiltersInput = {
   and?: InputMaybe<Array<InputMaybe<ComponentParticipantPersonalDetailsFiltersInput>>>;
-  dateOfBirth?: InputMaybe<DateFilterInput>;
+  dob?: InputMaybe<DateFilterInput>;
   firstName?: InputMaybe<StringFilterInput>;
   fullName?: InputMaybe<StringFilterInput>;
   gender?: InputMaybe<StringFilterInput>;
-  homeNumber?: InputMaybe<LongFilterInput>;
+  homeNumber?: InputMaybe<StringFilterInput>;
   lastName?: InputMaybe<StringFilterInput>;
   not?: InputMaybe<ComponentParticipantPersonalDetailsFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<ComponentParticipantPersonalDetailsFiltersInput>>>;
-  phoneNumber?: InputMaybe<LongFilterInput>;
+  phoneNumber?: InputMaybe<StringFilterInput>;
   residentialAddress?: InputMaybe<ComponentCommonAddressFiltersInput>;
 };
 
 export type ComponentParticipantPersonalDetailsInput = {
-  dateOfBirth?: InputMaybe<Scalars['Date']['input']>;
+  dob?: InputMaybe<Scalars['Date']['input']>;
   firstName?: InputMaybe<Scalars['String']['input']>;
   fullName?: InputMaybe<Scalars['String']['input']>;
   gender?: InputMaybe<Enum_Componentparticipantpersonaldetails_Gender>;
-  homeNumber?: InputMaybe<Scalars['Long']['input']>;
+  homeNumber?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
-  phoneNumber?: InputMaybe<Scalars['Long']['input']>;
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
   residentialAddress?: InputMaybe<ComponentCommonAddressInput>;
 };
 
@@ -523,6 +531,7 @@ export type LongFilterInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  /** Change user password. Confirm with the current password. */
   changePassword?: Maybe<UsersPermissionsLoginPayload>;
   createContentReleasesRelease?: Maybe<ContentReleasesReleaseEntityResponse>;
   createContentReleasesReleaseAction?: Maybe<ContentReleasesReleaseActionEntityResponse>;
@@ -530,22 +539,31 @@ export type Mutation = {
   createTraining?: Maybe<TrainingEntityResponse>;
   createUploadFile?: Maybe<UploadFileEntityResponse>;
   createUploadFolder?: Maybe<UploadFolderEntityResponse>;
+  /** Create a new role */
   createUsersPermissionsRole?: Maybe<UsersPermissionsCreateRolePayload>;
+  /** Create a new user */
   createUsersPermissionsUser: UsersPermissionsUserEntityResponse;
+  customRegister: UsersPermissionsLoginPayload;
   deleteContentReleasesRelease?: Maybe<ContentReleasesReleaseEntityResponse>;
   deleteContentReleasesReleaseAction?: Maybe<ContentReleasesReleaseActionEntityResponse>;
   deleteParticipant?: Maybe<ParticipantEntityResponse>;
   deleteTraining?: Maybe<TrainingEntityResponse>;
   deleteUploadFile?: Maybe<UploadFileEntityResponse>;
   deleteUploadFolder?: Maybe<UploadFolderEntityResponse>;
+  /** Delete an existing role */
   deleteUsersPermissionsRole?: Maybe<UsersPermissionsDeleteRolePayload>;
+  /** Delete an existing user */
   deleteUsersPermissionsUser: UsersPermissionsUserEntityResponse;
+  /** Confirm an email users email address */
   emailConfirmation?: Maybe<UsersPermissionsLoginPayload>;
+  /** Request a reset password token */
   forgotPassword?: Maybe<UsersPermissionsPasswordPayload>;
   login: UsersPermissionsLoginPayload;
   multipleUpload: Array<Maybe<UploadFileEntityResponse>>;
+  /** Register a user */
   register: UsersPermissionsLoginPayload;
   removeFile?: Maybe<UploadFileEntityResponse>;
+  /** Reset user password. Confirm with a code (resetToken from forgotPassword) */
   resetPassword?: Maybe<UsersPermissionsLoginPayload>;
   updateContentReleasesRelease?: Maybe<ContentReleasesReleaseEntityResponse>;
   updateContentReleasesReleaseAction?: Maybe<ContentReleasesReleaseActionEntityResponse>;
@@ -554,7 +572,9 @@ export type Mutation = {
   updateTraining?: Maybe<TrainingEntityResponse>;
   updateUploadFile?: Maybe<UploadFileEntityResponse>;
   updateUploadFolder?: Maybe<UploadFolderEntityResponse>;
+  /** Update an existing role */
   updateUsersPermissionsRole?: Maybe<UsersPermissionsUpdateRolePayload>;
+  /** Update an existing user */
   updateUsersPermissionsUser: UsersPermissionsUserEntityResponse;
   upload: UploadFileEntityResponse;
 };
@@ -604,6 +624,11 @@ export type MutationCreateUsersPermissionsRoleArgs = {
 
 export type MutationCreateUsersPermissionsUserArgs = {
   data: UsersPermissionsUserInput;
+};
+
+
+export type MutationCustomRegisterArgs = {
+  input: UsersPermissionsRegisterInput;
 };
 
 
@@ -1261,6 +1286,7 @@ export type UsersPermissionsPermissionRelationResponseCollection = {
 };
 
 export type UsersPermissionsRegisterInput = {
+  data?: InputMaybe<ParticipantInput>;
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
   username: Scalars['String']['input'];
@@ -1402,9 +1428,349 @@ export type UsersPermissionsUserRelationResponseCollection = {
   data: Array<UsersPermissionsUserEntity>;
 };
 
+export type CreateParticipantMutationVariables = Exact<{
+  data: ParticipantInput;
+}>;
+
+
+export type CreateParticipantMutation = { __typename?: 'Mutation', createParticipant?: { __typename?: 'ParticipantEntityResponse', data?: { __typename?: 'ParticipantEntity', id?: string | null } | null } | null };
+
+export type LoginMutationVariables = Exact<{
+  input: UsersPermissionsLoginInput;
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UsersPermissionsLoginPayload', jwt?: string | null, user: { __typename?: 'UsersPermissionsMe', id: string, email?: string | null, username: string } } };
+
+export type RegisterMutationVariables = Exact<{
+  customRegisterInput: UsersPermissionsRegisterInput;
+}>;
+
+
+export type RegisterMutation = { __typename?: 'Mutation', customRegister: { __typename?: 'UsersPermissionsLoginPayload', jwt?: string | null, user: { __typename?: 'UsersPermissionsMe', username: string, email?: string | null, id: string } } };
+
 export type CheckEmailExistsQueryVariables = Exact<{
-  filters?: InputMaybe<UsersPermissionsUserFiltersInput>;
+  email: Scalars['String']['input'];
 }>;
 
 
 export type CheckEmailExistsQuery = { __typename?: 'Query', usersPermissionsUsers?: { __typename?: 'UsersPermissionsUserEntityResponseCollection', data: Array<{ __typename?: 'UsersPermissionsUserEntity', attributes?: { __typename?: 'UsersPermissionsUser', email: string } | null }> } | null };
+
+export type GetProfileQueryVariables = Exact<{
+  usersPermissionsUserId?: InputMaybe<Scalars['ID']['input']>;
+}>;
+
+
+export type GetProfileQuery = { __typename?: 'Query', usersPermissionsUser?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', attributes?: { __typename?: 'UsersPermissionsUser', participant?: { __typename?: 'ParticipantEntityResponse', data?: { __typename?: 'ParticipantEntity', attributes?: { __typename?: 'Participant', personalDetails?: { __typename?: 'ComponentParticipantPersonalDetails', firstName?: string | null, lastName?: string | null, fullName?: string | null, gender?: Enum_Componentparticipantpersonaldetails_Gender | null, dob?: any | null, homeNumber?: string | null, phoneNumber?: string | null, residentialAddress?: { __typename?: 'ComponentCommonAddress', addressLine1?: string | null, addressLine2?: string | null, postalCode?: any | null, city?: string | null, state: Enum_Componentcommonaddress_State } | null } | null, jobInformation?: { __typename?: 'ComponentParticipantJobInformation', titlePosition?: string | null, company?: string | null, workEmail?: string | null, workPhone?: string | null, workAddress?: { __typename?: 'ComponentCommonAddress', addressLine1?: string | null, addressLine2?: string | null, postalCode?: any | null, city?: string | null, state: Enum_Componentcommonaddress_State } | null } | null } | null } | null } | null } | null } | null } | null };
+
+export type GetUserTrainingQueryVariables = Exact<{
+  usersPermissionsUserId?: InputMaybe<Scalars['ID']['input']>;
+}>;
+
+
+export type GetUserTrainingQuery = { __typename?: 'Query', usersPermissionsUser?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', attributes?: { __typename?: 'UsersPermissionsUser', participant?: { __typename?: 'ParticipantEntityResponse', data?: { __typename?: 'ParticipantEntity', attributes?: { __typename?: 'Participant', trainings?: Array<{ __typename?: 'ComponentCommonTrainingItems', training?: { __typename?: 'TrainingEntityResponse', data?: { __typename?: 'TrainingEntity', attributes?: { __typename?: 'Training', code: string, name: string, dateValidity?: any | null, type: Enum_Training_Type } | null } | null } | null, certificate: { __typename?: 'UploadFileEntityResponse', data?: { __typename?: 'UploadFileEntity', attributes?: { __typename?: 'UploadFile', name: string, size: number, url: string } | null } | null } } | null> | null } | null } | null } | null } | null } | null } | null };
+
+
+export const CreateParticipantDocument = gql`
+    mutation CreateParticipant($data: ParticipantInput!) {
+  createParticipant(data: $data) {
+    data {
+      id
+    }
+  }
+}
+    `;
+export type CreateParticipantMutationFn = Apollo.MutationFunction<CreateParticipantMutation, CreateParticipantMutationVariables>;
+
+/**
+ * __useCreateParticipantMutation__
+ *
+ * To run a mutation, you first call `useCreateParticipantMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateParticipantMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createParticipantMutation, { data, loading, error }] = useCreateParticipantMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateParticipantMutation(baseOptions?: Apollo.MutationHookOptions<CreateParticipantMutation, CreateParticipantMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateParticipantMutation, CreateParticipantMutationVariables>(CreateParticipantDocument, options);
+      }
+export type CreateParticipantMutationHookResult = ReturnType<typeof useCreateParticipantMutation>;
+export type CreateParticipantMutationResult = Apollo.MutationResult<CreateParticipantMutation>;
+export type CreateParticipantMutationOptions = Apollo.BaseMutationOptions<CreateParticipantMutation, CreateParticipantMutationVariables>;
+export const LoginDocument = gql`
+    mutation Login($input: UsersPermissionsLoginInput!) {
+  login(input: $input) {
+    jwt
+    user {
+      id
+      email
+      username
+    }
+  }
+}
+    `;
+export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
+
+/**
+ * __useLoginMutation__
+ *
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
+      }
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const RegisterDocument = gql`
+    mutation Register($customRegisterInput: UsersPermissionsRegisterInput!) {
+  customRegister(input: $customRegisterInput) {
+    jwt
+    user {
+      username
+      email
+      id
+    }
+  }
+}
+    `;
+export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, RegisterMutationVariables>;
+
+/**
+ * __useRegisterMutation__
+ *
+ * To run a mutation, you first call `useRegisterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRegisterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [registerMutation, { data, loading, error }] = useRegisterMutation({
+ *   variables: {
+ *      customRegisterInput: // value for 'customRegisterInput'
+ *   },
+ * });
+ */
+export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<RegisterMutation, RegisterMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, options);
+      }
+export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
+export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
+export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const CheckEmailExistsDocument = gql`
+    query CheckEmailExists($email: String!) {
+  usersPermissionsUsers(filters: {email: {eq: $email}}) {
+    data {
+      attributes {
+        email
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useCheckEmailExistsQuery__
+ *
+ * To run a query within a React component, call `useCheckEmailExistsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCheckEmailExistsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCheckEmailExistsQuery({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useCheckEmailExistsQuery(baseOptions: Apollo.QueryHookOptions<CheckEmailExistsQuery, CheckEmailExistsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CheckEmailExistsQuery, CheckEmailExistsQueryVariables>(CheckEmailExistsDocument, options);
+      }
+export function useCheckEmailExistsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CheckEmailExistsQuery, CheckEmailExistsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CheckEmailExistsQuery, CheckEmailExistsQueryVariables>(CheckEmailExistsDocument, options);
+        }
+export function useCheckEmailExistsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CheckEmailExistsQuery, CheckEmailExistsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CheckEmailExistsQuery, CheckEmailExistsQueryVariables>(CheckEmailExistsDocument, options);
+        }
+export type CheckEmailExistsQueryHookResult = ReturnType<typeof useCheckEmailExistsQuery>;
+export type CheckEmailExistsLazyQueryHookResult = ReturnType<typeof useCheckEmailExistsLazyQuery>;
+export type CheckEmailExistsSuspenseQueryHookResult = ReturnType<typeof useCheckEmailExistsSuspenseQuery>;
+export type CheckEmailExistsQueryResult = Apollo.QueryResult<CheckEmailExistsQuery, CheckEmailExistsQueryVariables>;
+export const GetProfileDocument = gql`
+    query GetProfile($usersPermissionsUserId: ID) {
+  usersPermissionsUser(id: $usersPermissionsUserId) {
+    data {
+      attributes {
+        participant {
+          data {
+            attributes {
+              personalDetails {
+                firstName
+                lastName
+                fullName
+                gender
+                dob
+                residentialAddress {
+                  addressLine1
+                  addressLine2
+                  postalCode
+                  city
+                  state
+                }
+                homeNumber
+                phoneNumber
+              }
+              jobInformation {
+                titlePosition
+                company
+                workEmail
+                workAddress {
+                  addressLine1
+                  addressLine2
+                  postalCode
+                  city
+                  state
+                }
+                workPhone
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetProfileQuery__
+ *
+ * To run a query within a React component, call `useGetProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProfileQuery({
+ *   variables: {
+ *      usersPermissionsUserId: // value for 'usersPermissionsUserId'
+ *   },
+ * });
+ */
+export function useGetProfileQuery(baseOptions?: Apollo.QueryHookOptions<GetProfileQuery, GetProfileQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProfileQuery, GetProfileQueryVariables>(GetProfileDocument, options);
+      }
+export function useGetProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProfileQuery, GetProfileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProfileQuery, GetProfileQueryVariables>(GetProfileDocument, options);
+        }
+export function useGetProfileSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetProfileQuery, GetProfileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetProfileQuery, GetProfileQueryVariables>(GetProfileDocument, options);
+        }
+export type GetProfileQueryHookResult = ReturnType<typeof useGetProfileQuery>;
+export type GetProfileLazyQueryHookResult = ReturnType<typeof useGetProfileLazyQuery>;
+export type GetProfileSuspenseQueryHookResult = ReturnType<typeof useGetProfileSuspenseQuery>;
+export type GetProfileQueryResult = Apollo.QueryResult<GetProfileQuery, GetProfileQueryVariables>;
+export const GetUserTrainingDocument = gql`
+    query GetUserTraining($usersPermissionsUserId: ID) {
+  usersPermissionsUser(id: $usersPermissionsUserId) {
+    data {
+      attributes {
+        participant {
+          data {
+            attributes {
+              trainings {
+                training {
+                  data {
+                    attributes {
+                      code
+                      name
+                      dateValidity
+                      type
+                    }
+                  }
+                }
+                certificate {
+                  data {
+                    attributes {
+                      name
+                      size
+                      url
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetUserTrainingQuery__
+ *
+ * To run a query within a React component, call `useGetUserTrainingQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserTrainingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserTrainingQuery({
+ *   variables: {
+ *      usersPermissionsUserId: // value for 'usersPermissionsUserId'
+ *   },
+ * });
+ */
+export function useGetUserTrainingQuery(baseOptions?: Apollo.QueryHookOptions<GetUserTrainingQuery, GetUserTrainingQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserTrainingQuery, GetUserTrainingQueryVariables>(GetUserTrainingDocument, options);
+      }
+export function useGetUserTrainingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserTrainingQuery, GetUserTrainingQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserTrainingQuery, GetUserTrainingQueryVariables>(GetUserTrainingDocument, options);
+        }
+export function useGetUserTrainingSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetUserTrainingQuery, GetUserTrainingQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetUserTrainingQuery, GetUserTrainingQueryVariables>(GetUserTrainingDocument, options);
+        }
+export type GetUserTrainingQueryHookResult = ReturnType<typeof useGetUserTrainingQuery>;
+export type GetUserTrainingLazyQueryHookResult = ReturnType<typeof useGetUserTrainingLazyQuery>;
+export type GetUserTrainingSuspenseQueryHookResult = ReturnType<typeof useGetUserTrainingSuspenseQuery>;
+export type GetUserTrainingQueryResult = Apollo.QueryResult<GetUserTrainingQuery, GetUserTrainingQueryVariables>;

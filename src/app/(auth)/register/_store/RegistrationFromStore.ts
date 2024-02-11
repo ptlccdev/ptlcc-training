@@ -70,7 +70,7 @@ const initialState = {
         company: '',
         titlePosition: '',
         workEmail: '',
-        workNumber: '',
+        workPhone: '',
         addressLine1: '',
         addressLine2: '',
         postalCode: '',

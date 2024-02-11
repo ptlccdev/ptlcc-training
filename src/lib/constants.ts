@@ -4,8 +4,9 @@ import { ToasterToast } from '@/hooks/useToast'
 //                                       STRAPI
 // =================================================================================================
 
-export const STRAPI_URL =
+export const STRAPI_GRAPHQL_URL =
     'https://ptlcc-training-strapi-backend.orb.local/graphql'
+export const STRAPI_GRAPHQL = 'https://ptlcc-training-strapi-backend.orb.local'
 
 // =================================================================================================
 //                                       PERSONAL INFO FORM CONSTANTS
@@ -29,10 +30,10 @@ export enum RESIDENTIAL_ADDRESS_FIELDS {
     STATE = 'state',
 }
 
-export enum GENDER {
-    male = 'Male',
-    female = 'Female',
-}
+// export enum GENDER {
+//     male = 'Male',
+//     female = 'Female',
+// }
 
 // =================================================================================================
 //                                       JOB INFO FORM CONSTANTS
@@ -42,7 +43,7 @@ export enum EMPLOYMENT_INFO_FIELDS {
     COMPANY = 'company',
     TITLE_POSITION = 'titlePosition',
     WORK_EMAIL = 'workEmail',
-    WORK_NUMBER = 'workNumber',
+    WORK_NUMBER = 'workPhone',
 }
 
 export enum WORK_ADDRESS_FIELDS {
@@ -64,28 +65,32 @@ export enum ACCOUNT_FIELDS {
     CONFIRM_PASSWORD = 'confirmPassword',
 }
 
+export enum CUSTOM_FIELDS {
+    PASSWORD_STRENGTH = 'passwordStrength',
+}
+
 // =================================================================================================
 //                                      GENERAL REGISTRATION CONSTANTS
 // =================================================================================================
 
-export enum STATE {
-    Johor = 'Johor',
-    Kedah = 'Kedah',
-    Kelantan = 'Kelantan',
-    Melaka = 'Melaka',
-    NegeriSembilan = 'Negeri Sembilan',
-    Pahang = 'Pahang',
-    Penang = 'Penang',
-    Perak = 'Perak',
-    Perlis = 'Perlis',
-    Sabah = 'Sabah',
-    Sarawak = 'Sarawak',
-    Selangor = 'Selangor',
-    Terengganu = 'Terengganu',
-    WilayahPersekutuanKualaLumpur = 'Wilayah Persekutuan Kuala Lumpur',
-    WilayahPersekutuanLabuan = 'Wilayah Persekutuan Labuan',
-    WilayahPersekutuanPutrajaya = 'Wilayah Persekutuan Putrajaya',
-}
+// export enum STATE {
+//     Johor = 'Johor',
+//     Kedah = 'Kedah',
+//     Kelantan = 'Kelantan',
+//     Melaka = 'Melaka',
+//     NegeriSembilan = 'Negeri Sembilan',
+//     Pahang = 'Pahang',
+//     Penang = 'Penang',
+//     Perak = 'Perak',
+//     Perlis = 'Perlis',
+//     Sabah = 'Sabah',
+//     Sarawak = 'Sarawak',
+//     Selangor = 'Selangor',
+//     Terengganu = 'Terengganu',
+//     WilayahPersekutuanKualaLumpur = 'Wilayah Persekutuan Kuala Lumpur',
+//     WilayahPersekutuanLabuan = 'Wilayah Persekutuan Labuan',
+//     WilayahPersekutuanPutrajaya = 'Wilayah Persekutuan Putrajaya',
+// }
 
 export enum SIGN_UP_ACCORDIANS {
     BASIC_INFO = 'basic-info',
@@ -112,3 +117,11 @@ export const SIGNUP_FORM_ERROR_TOAST = {
     description:
         'Please review the form and correct any highlighted errors to proceed',
 } as ToasterToast
+
+// =================================================================================================
+//                                       COOKIES KEYS
+// =================================================================================================
+
+export enum COOKIES {
+    SESSION = 'session',
+}

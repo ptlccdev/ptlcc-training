@@ -28,7 +28,7 @@ const RegisterPage = async () => {
                 <div className='mb-8 w-full'>
                     <JoySvg />
                 </div>
-                <div className='text-4xl font-light tracking-tight text-primaryColor'>
+                <div className='text-4xl font-extralight tracking-tight text-backgroundColor'>
                     Sign up and get your certifications
                 </div>
             </div>

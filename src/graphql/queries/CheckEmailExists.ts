@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { graphql } from '@/graphql/gql'
 
-export const CheckEmailExists = gql`
-    query CheckEmailExists($filters: UsersPermissionsUserFiltersInput) {
-        usersPermissionsUsers(filters: $filters) {
+export default graphql(`
+    query CheckEmailExists($email: String!) {
+        usersPermissionsUsers(filters: { email: { eq: $email } }) {
             data {
                 attributes {
                     email
@@ -10,4 +10,4 @@ export const CheckEmailExists = gql`
             }
         }
     }
-`
+`)

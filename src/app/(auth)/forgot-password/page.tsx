@@ -23,7 +23,7 @@ const ForgotPasswordPage = () => {
                     'linear-gradient(to top, #09203f 0%, #537895 100%)',
             }}
         >
-            <Card className='flex h-[90%] w-[90%] flex-col justify-center overflow-auto px-2 py-4 shadow-2xl md:w-[453px]'>
+            <Card className='flex h-[95%] w-[90%] flex-col justify-center overflow-auto px-2 py-4 shadow-2xl md:w-[453px]'>
                 <div className='flex items-center justify-center'>
                     <ForgotPasswordSvg
                         className='h-[250px] w-[350px]'

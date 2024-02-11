@@ -24,7 +24,6 @@ import { Badge } from '@/components/ui/badge'
 import { ErrorFieldMessage } from '@/components/ui/errorFieldMessage'
 import { WorkIcon, BuildingIcon } from '@/components/icons'
 import {
-    STATE,
     EMPLOYMENT_INFO_FIELDS,
     WORK_ADDRESS_FIELDS,
     SIGN_UP_ACCORDIANS,
@@ -32,6 +31,7 @@ import {
 
 import { useRegistrationFormStore } from '../../_store/RegistrationFromStore'
 import { JobInfoFormSchema, JobInfoFormSchemaType } from '../../_schema'
+import { Enum_Componentcommonaddress_State } from '@/graphql/types'
 
 interface JobInfoFormProps {
     formId: string
@@ -47,7 +47,7 @@ const JobInfoForm = ({ formId, nextStep }: JobInfoFormProps) => {
             company,
             titlePosition,
             workEmail,
-            workNumber,
+            workPhone,
             addressLine1,
             addressLine2,
             postalCode,
@@ -74,7 +74,7 @@ const JobInfoForm = ({ formId, nextStep }: JobInfoFormProps) => {
             company,
             titlePosition,
             workEmail,
-            workNumber,
+            workPhone,
             addressLine1,
             addressLine2,
             postalCode,
@@ -163,7 +163,9 @@ const JobInfoForm = ({ formId, nextStep }: JobInfoFormProps) => {
                 <AccordionItem value={SIGN_UP_ACCORDIANS.EMPLOYMENT_INFO}>
                     <AccordionTrigger>
                         <h3 className='text-md col-span-6 flex flex-row items-center px-4 font-medium md:col-span-3'>
-                            <WorkIcon />
+                            <WorkIcon
+                                className={`h-6 w-6 ${employmentInfoIsOpen && 'text-secondaryColor'}`}
+                            />
                             <span className='px-2'>Employment Info</span>
                         </h3>
                         <Badge
@@ -249,13 +251,13 @@ const JobInfoForm = ({ formId, nextStep }: JobInfoFormProps) => {
                                 <Input
                                     id={EMPLOYMENT_INFO_FIELDS.WORK_NUMBER}
                                     placeholder='Enter your work phone number'
-                                    error={!!errors.workNumber}
+                                    error={!!errors.workPhone}
                                     {...register(
                                         EMPLOYMENT_INFO_FIELDS.WORK_NUMBER
                                     )}
                                 />
                                 <ErrorFieldMessage
-                                    message={errors.workNumber?.message}
+                                    message={errors.workPhone?.message}
                                 />
                             </div>
                         </div>
@@ -264,7 +266,9 @@ const JobInfoForm = ({ formId, nextStep }: JobInfoFormProps) => {
                 <AccordionItem value={SIGN_UP_ACCORDIANS.WORK_ADDRESS}>
                     <AccordionTrigger>
                         <h3 className='text-md col-span-6 flex flex-row items-center px-4 font-medium md:col-span-3'>
-                            <BuildingIcon />
+                            <BuildingIcon
+                                className={`h-6 w-6 ${workAddressIsOpen && 'text-secondaryColor'}`}
+                            />
                             <span className='px-2'>Work Address</span>
                         </h3>
                         <Badge
@@ -373,7 +377,9 @@ const JobInfoForm = ({ formId, nextStep }: JobInfoFormProps) => {
                                         <SelectValue placeholder='Select your state' />
                                     </SelectTrigger>
                                     <SelectContent position='popper'>
-                                        {Object.values(STATE).map(state => (
+                                        {Object.values(
+                                            Enum_Componentcommonaddress_State
+                                        ).map(state => (
                                             <SelectItem
                                                 value={state}
                                                 key={nanoid()}

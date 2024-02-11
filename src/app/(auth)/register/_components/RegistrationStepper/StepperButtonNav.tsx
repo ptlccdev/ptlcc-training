@@ -30,7 +30,7 @@ const StepperButtonNav = ({
                     disabled={formIsInvalid}
                     form={activeFormId}
                 >
-                    Create account <EnterIcon className='ml-2 h-4 w-4' />
+                    Create account <EnterIcon className='ml-2 h-5 w-5' />
                 </Button>
             ) : (
                 <Button

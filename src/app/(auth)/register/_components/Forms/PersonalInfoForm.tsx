@@ -32,8 +32,6 @@ import { Badge } from '@/components/ui/badge'
 import { ErrorFieldMessage } from '@/components/ui/errorFieldMessage'
 import { UserIcon, AddressBookIcon } from '@/components/icons'
 import {
-    STATE,
-    GENDER,
     BASIC_INFO_FIELDS,
     RESIDENTIAL_ADDRESS_FIELDS,
     SIGN_UP_ACCORDIANS,
@@ -44,6 +42,10 @@ import {
     PersonalInfoBasicFormSchema,
     PersonalInfoBasicFormSchemaType,
 } from '../../_schema'
+import {
+    Enum_Componentcommonaddress_State,
+    Enum_Componentparticipantpersonaldetails_Gender,
+} from '@/graphql/types'
 
 interface PersonalInfoFormProps {
     formId: string
@@ -200,9 +202,11 @@ const PersonalInfoForm = ({ formId, nextStep }: PersonalInfoFormProps) => {
             >
                 <AccordionItem value={SIGN_UP_ACCORDIANS.BASIC_INFO}>
                     <AccordionTrigger>
-                        <h3 className='text-md col-span-3 flex flex-row items-center px-4 font-medium'>
-                            <UserIcon />
-                            <span className='px-2'>Basic Info</span>
+                        <h3 className='text-md col-span-3 flex flex-row items-center justify-between whitespace-nowrap px-4 font-medium'>
+                            <UserIcon
+                                className={`h-6 w-6 ${basicInfoIsOpen && 'text-secondaryColor'}`}
+                            />
+                            <span className='px-2 '>Basic Info</span>
                         </h3>
                         <Badge
                             hidden={
@@ -285,9 +289,11 @@ const PersonalInfoForm = ({ formId, nextStep }: PersonalInfoFormProps) => {
                                         <SelectValue placeholder='Select your gender' />
                                     </SelectTrigger>
                                     <SelectContent position='popper'>
-                                        {Object.values(GENDER).map(gender => (
+                                        {Object.values(
+                                            Enum_Componentparticipantpersonaldetails_Gender
+                                        ).map(gender => (
                                             <SelectItem
-                                                value={gender.toLowerCase()}
+                                                value={gender}
                                                 key={nanoid()}
                                             >
                                                 {gender}
@@ -387,7 +393,9 @@ const PersonalInfoForm = ({ formId, nextStep }: PersonalInfoFormProps) => {
                 <AccordionItem value={SIGN_UP_ACCORDIANS.RESIDENTIAL_ADDRESS}>
                     <AccordionTrigger>
                         <h3 className='text-md col-span-6 flex flex-row items-center px-4 font-medium md:col-span-3'>
-                            <AddressBookIcon />
+                            <AddressBookIcon
+                                className={`h-6 w-6 ${residentialAddressIsOpen && 'text-secondaryColor'}`}
+                            />
                             <span className='px-2'>Residential Address</span>
                         </h3>
                         <Badge
@@ -508,7 +516,9 @@ const PersonalInfoForm = ({ formId, nextStep }: PersonalInfoFormProps) => {
                                         <SelectValue placeholder='Select your state' />
                                     </SelectTrigger>
                                     <SelectContent position='popper'>
-                                        {Object.values(STATE).map(state => (
+                                        {Object.values(
+                                            Enum_Componentcommonaddress_State
+                                        ).map(state => (
                                             <SelectItem
                                                 value={state}
                                                 key={nanoid()}

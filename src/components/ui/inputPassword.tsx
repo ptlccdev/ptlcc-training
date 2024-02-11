@@ -5,7 +5,7 @@ import { EyeOpenIcon, EyeCloseIcon } from '@/components/icons'
 import { ErrorFieldMessage } from '@/components/ui/errorFieldMessage'
 import { nanoid } from 'nanoid'
 
-import { cn } from '@/lib/utils'
+import { cn, setFocusToEnd } from '@/lib/utils'
 
 export interface InputPasswordProps {
     showPassword: boolean
@@ -95,12 +95,21 @@ const InputPassword = forwardRef<HTMLInputElement, InputPasswordProps>(
         },
         ref
     ) => {
+        const focusInput = (inputId?: string) => {
+            const siblingInput = document.querySelector(
+                `#${inputId}`
+            ) as HTMLElement
+            if (siblingInput && siblingInput.tagName === 'INPUT') {
+                siblingInput.focus()
+            }
+        }
         return (
             <div className={cn('relative', containerClassName)}>
                 {labelComponent}
                 <Input
                     ref={ref}
                     type={showPassword ? 'text' : 'password'}
+                    onFocus={e => setFocusToEnd(e.target)}
                     {...inputProps}
                 />
                 <div
@@ -108,7 +117,10 @@ const InputPassword = forwardRef<HTMLInputElement, InputPasswordProps>(
                         'absolute right-4 cursor-pointer items-center',
                         iconClassName
                     )}
-                    onClick={() => toggleShowPassword(!showPassword)}
+                    onClick={() => {
+                        toggleShowPassword(!showPassword)
+                        focusInput(inputProps?.id)
+                    }}
                 >
                     {showPassword ? <EyeOpenIcon /> : <EyeCloseIcon />}
                 </div>
