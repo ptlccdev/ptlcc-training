@@ -3,21 +3,17 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { nanoid } from 'nanoid'
 import { PTLCC } from '@/components/svgs'
 import { UserIcon } from '@/components/icons'
-import Link from 'next/link'
-import { FileTextIcon, ExitIcon, PersonIcon } from '@radix-ui/react-icons'
-import { cn } from '@/lib/utils'
-import { headers } from 'next/headers'
-import { revalidatePath } from 'next/cache'
+import { FileTextIcon, PersonIcon } from '@radix-ui/react-icons'
 import NavItem from './NavItem'
+import { TrainTrack } from 'lucide-react'
+import { getSessionData } from '@/actions'
+import { Separator } from '@/components/ui/separator'
 
 interface DrawerProps {
     drawerWidth: number
 }
 
-const Drawer = ({ drawerWidth }: DrawerProps) => {
-    const headersList = headers()
-    const pathname = headersList.get('x-pathname')
-    console.log('pathname', pathname)
+const Drawer = async ({ drawerWidth }: DrawerProps) => {
     const navItemList = [
         {
             title: 'User',
@@ -25,24 +21,31 @@ const Drawer = ({ drawerWidth }: DrawerProps) => {
             route: '/profile',
         },
         {
-            title: 'Trainings',
-            Icon: <FileTextIcon className='inline h-6 w-6' />,
+            title: 'Training',
+            Icon: <TrainTrack className='inline h-6 w-6' />,
             route: '/training',
         },
     ]
 
+    const { data: session } = await getSessionData()
+
     return (
         <div
-            className='fixed z-30 h-full border border-y-0 border-l-0 border-slate-200 bg-primaryColor'
+            className='fixed z-30 h-full bg-primaryColor'
             style={{ width: `${drawerWidth}rem` }}
         >
             <ScrollArea className='h-full w-full'>
-                <div className='flex h-full w-full flex-col items-start justify-start px-4'>
-                    <div className='w-full pb-6 pl-4 pt-5 text-2xl font-bold text-white'>
-                        PTLCC Training
+                <div className='px-6 py-6'>
+                    <div className='font-medium text-white'>
+                        PTLCC Dashboard
                     </div>
+                    <div className='text-sm text-slate-400'>
+                        {session?.user.email}
+                    </div>
+                </div>
+                {/* <Separator className='mb-6 bg-slate-600' /> */}
+                <div className='flex h-full w-full flex-col items-start justify-start px-4'>
                     <div className='flex w-full flex-col gap-1'>
-                        {/* {Array.from({ length: 40 }).map(_ => ( */}
                         {navItemList.map(props => (
                             <NavItem key={nanoid()} {...props} />
                         ))}
@@ -54,3 +57,9 @@ const Drawer = ({ drawerWidth }: DrawerProps) => {
 }
 
 export default Drawer
+
+// <div className='w-full pb-4 pl-0 pt-5 text-2xl font-bold text-primaryColor'>
+//     {/* <PTLCC className='h-14 w-32' /> */}
+//     {/* <PTLCC className='h-24 w-52' /> */}
+
+// </div>

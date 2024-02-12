@@ -1,25 +1,25 @@
 'use client'
 import { useState, useTransition } from 'react'
+import Link from 'next/link'
+import { EnterIcon, ExclamationTriangleIcon } from '@radix-ui/react-icons'
+import { useForm } from 'react-hook-form'
+
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import Link from 'next/link'
-import { EnterIcon, ExclamationTriangleIcon } from '@radix-ui/react-icons'
 import { InputPassword } from '@/components/ui/inputPassword'
-import { useForm } from 'react-hook-form'
-import {
-    LoginFormSchema,
-    LoginFormSchemaType,
-} from '../_schema/LoginFormSchema'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import LoadingSpinner from '@/components/svgs/LoadingSpinner'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ACCOUNT_FIELDS } from '@/lib/constants'
+import { ACCOUNT_FIELDS } from '@/constants'
 import { ErrorFieldMessage } from '@/components/ui/errorFieldMessage'
 import { loginHandler } from '@/actions'
 import { LoginPayload } from '@/types'
 
-import { useFormState } from 'react-dom'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import LoadingSpinner from '@/components/svgs/LoadingSpinner'
+import {
+    LoginFormSchema,
+    LoginFormSchemaType,
+} from '../_schema/LoginFormSchema'
 
 const LoginForm = () => {
     const [showPassword, setShowPassword] = useState(false)
@@ -28,8 +28,6 @@ const LoginForm = () => {
 
     const {
         register,
-        getValues,
-        trigger,
         handleSubmit,
         formState: { errors, isValid },
     } = useForm<LoginFormSchemaType>({
@@ -42,7 +40,6 @@ const LoginForm = () => {
     })
 
     const onLoginHandler = (data: any) => {
-        console.log('onLoginHandler', data)
         const payload: LoginPayload = {
             input: {
                 identifier: data.email,
@@ -50,9 +47,8 @@ const LoginForm = () => {
             },
         }
         startTransition(async () => {
-            const test = await loginHandler(payload)
-            console.log('onLoginHandler finish', test)
-            if (test) {
+            const { success } = await loginHandler(payload)
+            if (!success) {
                 setGeneralError(true)
             }
         })

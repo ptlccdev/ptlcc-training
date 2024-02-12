@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { EMPLOYMENT_INFO_FIELDS, WORK_ADDRESS_FIELDS } from '@/lib/constants'
+import { EMPLOYMENT_INFO_FIELDS, WORK_ADDRESS_FIELDS } from '@/constants'
 
 export const JobInfoFormSchema = z.object({
     [`${EMPLOYMENT_INFO_FIELDS.COMPANY}`]: z

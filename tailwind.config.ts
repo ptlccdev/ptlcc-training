@@ -38,10 +38,14 @@ const config = {
             },
             colors: {
                 primaryColor: '#1c2536',
+
                 // primaryColor: '#09203f',
                 secondaryColor: '#6366f1',
                 // secondaryColor: '#cd9a35',
                 backgroundColor: '#121212',
+                drawerTextActive: '#7b79ff',
+                drawerBgActive: '#11141c',
+                drawerBg: '',
                 // registerBlue: '#0f538d',
                 // backgroundColor: '#121212',
             },

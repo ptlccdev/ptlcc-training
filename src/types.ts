@@ -50,3 +50,10 @@ export type Trainings = NonNullable<
 >
 
 export type Unpacked<T> = T extends (infer U)[] ? U : T
+
+export interface Payload<Data> {
+    data?: Data
+    success: boolean
+    message: string
+    status: number
+}

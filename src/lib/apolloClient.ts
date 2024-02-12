@@ -3,15 +3,24 @@ import {
     NextSSRInMemoryCache,
     NextSSRApolloClient,
 } from '@apollo/experimental-nextjs-app-support/ssr'
+import { onError } from '@apollo/client/link/error'
 import { registerApolloClient } from '@apollo/experimental-nextjs-app-support/rsc'
 import { setContext } from '@apollo/client/link/context'
 import https from 'https'
-import { STRAPI_GRAPHQL_URL } from './constants'
+import { STRAPI_GRAPHQL_URL } from '../constants'
 import { getAuthToken } from './utils'
 
 export const { getClient } = registerApolloClient(() => {
-    process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
-    console.log('NODE_ENV', process.env.NODE_ENV)
+    const errorLink = onError(({ graphQLErrors, networkError }) => {
+        if (graphQLErrors)
+            graphQLErrors.forEach(({ message, locations, path }) =>
+                console.log(
+                    `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+                )
+            )
+        if (networkError) console.error(`[Network error]: ${networkError}`)
+    })
+
     const httpLink = new HttpLink({
         uri: STRAPI_GRAPHQL_URL,
         fetchOptions: {
@@ -30,8 +39,10 @@ export const { getClient } = registerApolloClient(() => {
             },
         }
     })
+
+    process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
     return new NextSSRApolloClient({
         cache: new NextSSRInMemoryCache(),
-        link: authLink.concat(httpLink),
+        link: authLink.concat(errorLink).concat(httpLink),
     })
 })

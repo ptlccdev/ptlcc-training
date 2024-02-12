@@ -6,7 +6,7 @@ import {
     EMPLOYMENT_INFO_FIELDS,
     WORK_ADDRESS_FIELDS,
     ACCOUNT_FIELDS,
-} from '@/lib/constants'
+} from '@/constants'
 
 // =================================================================================================
 //                                       TYPES
@@ -35,6 +35,7 @@ export type RegistrationFormStore = {
     jobInfo: JobInfo
     account: Account
     activeForm: ActiveForm
+    isSubmitting: boolean
     updateFormData: (
         id: string,
         latestData: PersonalInfo | JobInfo | Account
@@ -44,6 +45,7 @@ export type RegistrationFormStore = {
         id: string,
         activeFormRef: MutableRefObject<HTMLFormElement>
     ) => void
+    setIsSubmitting: (status: boolean) => void
     reset: () => void
 }
 
@@ -88,6 +90,7 @@ const initialState = {
         ref: undefined,
         isValid: true,
     },
+    isSubmitting: false,
 }
 
 // =================================================================================================
@@ -113,6 +116,7 @@ export const useRegistrationFormStore = create<RegistrationFormStore>(set => ({
             ...state,
             activeForm: { ...state.activeForm, id, ref: activeFormRef },
         })),
+    setIsSubmitting: (status: boolean) => set({ isSubmitting: status }),
     reset: () => {
         set(initialState)
     },

@@ -1,15 +1,19 @@
 import React from 'react'
-import { Button } from '@/components/ui/button'
-import { StepperState } from 'headless-stepper'
 import { EnterIcon } from '@radix-ui/react-icons'
-import { SIGNUP_STEPS } from '@/lib/constants'
+import { StepperState } from 'headless-stepper'
+
+import { Button } from '@/components/ui/button'
+import { SIGNUP_STEPS } from '@/constants'
+import LoadingSpinner from '@/components/svgs/LoadingSpinner'
 
 const StepperButtonNav = ({
+    isSubmitting,
     state,
     formIsInvalid,
     activeFormId,
     prevStep,
 }: {
+    isSubmitting: boolean
     state: StepperState
     formIsInvalid: boolean
     activeFormId: string
@@ -30,7 +34,12 @@ const StepperButtonNav = ({
                     disabled={formIsInvalid}
                     form={activeFormId}
                 >
-                    Create account <EnterIcon className='ml-2 h-5 w-5' />
+                    Create account{' '}
+                    {isSubmitting ? (
+                        <LoadingSpinner className='ml-auto h-5 w-5' />
+                    ) : (
+                        <EnterIcon className='ml-2 h-5 w-5' />
+                    )}
                 </Button>
             ) : (
                 <Button

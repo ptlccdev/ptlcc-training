@@ -1,8 +1,10 @@
 import React from 'react'
 import Link from 'next/link'
-import LoginForm from './_components/LoginForm'
+
 import { LoginIllustration, PTLCC } from '@/components/svgs'
 import { Card } from '@/components/ui/card'
+
+import LoginForm from './_components/LoginForm'
 
 const LoginPage = async () => {
     const LoginContent = () => (

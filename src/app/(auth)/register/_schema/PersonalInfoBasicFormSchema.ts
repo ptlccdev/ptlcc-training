@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { BASIC_INFO_FIELDS, RESIDENTIAL_ADDRESS_FIELDS } from '@/lib/constants'
+import { BASIC_INFO_FIELDS, RESIDENTIAL_ADDRESS_FIELDS } from '@/constants'
 
 export const PersonalInfoBasicFormSchema = z.object({
     [`${BASIC_INFO_FIELDS.FIRST_NAME}`]: z

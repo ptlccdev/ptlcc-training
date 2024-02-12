@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { nanoid } from 'nanoid'
 
-import { cn } from '@/lib/utils'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -23,15 +22,15 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { ErrorFieldMessage } from '@/components/ui/errorFieldMessage'
 import { WorkIcon, BuildingIcon } from '@/components/icons'
+import { Enum_Componentcommonaddress_State } from '@/graphql/types'
 import {
     EMPLOYMENT_INFO_FIELDS,
     WORK_ADDRESS_FIELDS,
     SIGN_UP_ACCORDIANS,
-} from '@/lib/constants'
+} from '@/constants'
 
 import { useRegistrationFormStore } from '../../_store/RegistrationFromStore'
 import { JobInfoFormSchema, JobInfoFormSchemaType } from '../../_schema'
-import { Enum_Componentcommonaddress_State } from '@/graphql/types'
 
 interface JobInfoFormProps {
     formId: string
@@ -135,7 +134,6 @@ const JobInfoForm = ({ formId, nextStep }: JobInfoFormProps) => {
     // ==============================================================================================
 
     const onContinue = (data: any) => {
-        console.log('All fields validated!', data)
         updateFormData(formId, data)
         nextStep()
     }

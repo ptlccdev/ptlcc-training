@@ -15,9 +15,9 @@ const DashboardLayout = ({
             <Drawer drawerWidth={DRAWER_WIDTH} />
             <Header drawerWidth={DRAWER_WIDTH} headerHeight={HEADER_HEIGHT} />
             <div
-                className={`w-full overflow-y-scroll p-8`}
+                className={`w-full overflow-y-scroll`}
                 style={{
-                    paddingLeft: `${DRAWER_WIDTH + 2}rem`,
+                    paddingLeft: `${DRAWER_WIDTH}rem`,
                     height: `calc(100% - ${HEADER_HEIGHT}rem)`,
                 }}
             >

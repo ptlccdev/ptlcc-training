@@ -27,10 +27,10 @@ interface HeaderProps {
 }
 
 const Header = async ({ drawerWidth, headerHeight }: HeaderProps) => {
-    const session = await getSessionData()
+    const { data: session } = await getSessionData()
     return (
         <div
-            className={`sticky top-0 z-10 w-full border border-x-0 border-slate-200 bg-white shadow-sm`}
+            className={`sticky top-0 z-10 w-full border border-x-0 border-slate-200 bg-white`}
             style={{
                 width: `calc(100% - ${drawerWidth}rem)`,
                 height: `${headerHeight}rem`,

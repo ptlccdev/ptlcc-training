@@ -1,9 +1,9 @@
 import React, { HTMLAttributes } from 'react'
 import { StepperState } from 'headless-stepper'
 import { useWindowSize } from '@/hooks'
-import { SIGNUP_STEPS } from '@/lib/constants'
-import { useToast } from '@/hooks/useToast'
-import { SIGNUP_FORM_ERROR_TOAST } from '@/lib/constants'
+import { SIGNUP_STEPS } from '@/constants'
+import { useToast } from '@/hooks'
+import { SIGNUP_FORM_ERROR_TOAST } from '@/constants'
 import { useRegistrationFormStore } from '../../_store/RegistrationFromStore'
 
 const Stepper = ({
@@ -24,16 +24,13 @@ const Stepper = ({
         updateFormData,
     } = useRegistrationFormStore()
 
-    const DEV = true
-
     const onJumpStep = (index: number) => {
         // won't allow user to skip steps forward
         if (index > state.currentStep + 1) {
             return
         }
 
-        // if (index < state.currentStep) {
-        if (DEV || index < state.currentStep) {
+        if (index < state.currentStep) {
             setStep(index)
             return
         }

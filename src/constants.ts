@@ -6,7 +6,7 @@ import { ToasterToast } from '@/hooks/useToast'
 
 export const STRAPI_GRAPHQL_URL =
     'https://ptlcc-training-strapi-backend.orb.local/graphql'
-export const STRAPI_GRAPHQL = 'https://ptlcc-training-strapi-backend.orb.local'
+export const STRAPI_GRAPHQL = 'https://ptlcc-training-strapi-backend.orb.local/'
 
 // =================================================================================================
 //                                       PERSONAL INFO FORM CONSTANTS
@@ -124,4 +124,23 @@ export const SIGNUP_FORM_ERROR_TOAST = {
 
 export enum COOKIES {
     SESSION = 'session',
+}
+
+// =================================================================================================
+//
+// =================================================================================================
+
+export enum TablePageSize {
+    Small = '10',
+    Medium = '20',
+    Large = '30',
+    XLarge = '40',
+    XXLarge = '50',
+    XXXLarge = '70',
+    XXXXLarge = '100',
+}
+
+export enum GENERIC_MESSAGE {
+    SUCCESS = 'success',
+    ERROR = 'error',
 }

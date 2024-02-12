@@ -1,30 +1,32 @@
 import { useState, useEffect, useRef, MutableRefObject, useMemo } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { format } from 'date-fns'
+import { useRouter } from 'next/navigation'
 
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { InputPassword } from '@/components/ui/inputPassword'
 import { ErrorFieldMessage } from '@/components/ui/errorFieldMessage'
-import { ACCOUNT_FIELDS, CUSTOM_FIELDS } from '@/lib/constants'
-import { debounce, simplify } from '@/lib/utils'
+import { ACCOUNT_FIELDS, CUSTOM_FIELDS } from '@/constants'
+import { debounce } from '@/lib/utils'
 import { registrationHandler } from '@/actions'
-import { useRegisterMutation } from '@/graphql/types'
-import { useMutation } from '@apollo/client'
-
-import { useRegistrationFormStore } from '../../_store/RegistrationFromStore'
-import { AccountFieldsSchema, AccountFieldsSchemaType } from '../../_schema'
 import { RegistationPayload } from '@/types'
 import {
     Enum_Componentcommonaddress_State,
     Enum_Componentparticipantpersonaldetails_Gender,
 } from '@/graphql/types'
-import { Register } from '@/graphql/mutations'
-import { format } from 'date-fns'
+import { useToast } from '@/hooks'
+
+import { useRegistrationFormStore } from '../../_store/RegistrationFromStore'
+import { AccountFieldsSchema, AccountFieldsSchemaType } from '../../_schema'
+
 interface AccountFormProps {
     formId: string
 }
 const AccountForm = ({ formId }: AccountFormProps) => {
+    const { toast } = useToast()
+    const router = useRouter()
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
     const {
@@ -34,6 +36,7 @@ const AccountForm = ({ formId }: AccountFormProps) => {
         setFormIsValid,
         updateFormData,
         setActiveFormRef,
+        setIsSubmitting,
     } = useRegistrationFormStore()
     const formRef = useRef<HTMLFormElement>(null)
 
@@ -111,7 +114,6 @@ const AccountForm = ({ formId }: AccountFormProps) => {
         if (isValid) {
             const data = getValues()
 
-            console.log('All fields validated!', data)
             updateFormData(formId, data)
             const { username, email, password } = data
             const {
@@ -164,10 +166,18 @@ const AccountForm = ({ formId }: AccountFormProps) => {
                     },
                 },
             }
-            console.log('Final Payload', {
-                payload,
-            })
-            await registrationHandler(payload)
+            setIsSubmitting(true)
+            const { status, message } = await registrationHandler(payload)
+            if (status) {
+                router.replace('/profile')
+            } else {
+                toast({
+                    variant: 'destructive',
+                    title: 'Uh oh! Something went wrong.',
+                    description: message,
+                })
+            }
+            setIsSubmitting(false)
         }
     }
 

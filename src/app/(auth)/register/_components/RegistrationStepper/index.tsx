@@ -3,9 +3,9 @@ import { useEffect, useMemo } from 'react'
 import { useStepper } from 'headless-stepper'
 import { nanoid } from 'nanoid'
 
-import { FORM_ID, SIGNUP_STEPS } from '@/lib/constants'
+import { FORM_ID, SIGNUP_STEPS } from '@/constants'
 import { useToast } from '@/hooks/useToast'
-import { SIGNUP_FORM_ERROR_TOAST } from '@/lib/constants'
+import { SIGNUP_FORM_ERROR_TOAST } from '@/constants'
 
 import { AccountForm, JobInfoForm, PersonalInfoForm } from '../Forms'
 import Steppper from './Stepper'
@@ -14,6 +14,7 @@ import { useRegistrationFormStore } from '../../_store/RegistrationFromStore'
 
 const RegistrationStepper = () => {
     const {
+        isSubmitting,
         activeForm: { isValid },
         reset,
     } = useRegistrationFormStore()
@@ -89,6 +90,7 @@ const RegistrationStepper = () => {
             />
             <div className='my-6 w-full md:h-full'>{activeForm}</div>
             <StepperButtonNav
+                isSubmitting={isSubmitting}
                 state={state}
                 formIsInvalid={!isValid}
                 activeFormId={activeFormId}

@@ -8,10 +8,6 @@ const Passcode = ({ inputClassName }: { inputClassName?: string }) => {
         isAlphaNumeric: true,
     })
 
-    if (isComplete) {
-        console.log('final passcode', passcode.join(''))
-    }
-
     return (
         <>
             {passcode.map((value, index) => {

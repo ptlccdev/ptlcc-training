@@ -35,17 +35,17 @@ import {
     BASIC_INFO_FIELDS,
     RESIDENTIAL_ADDRESS_FIELDS,
     SIGN_UP_ACCORDIANS,
-} from '@/lib/constants'
-
-import { useRegistrationFormStore } from '../../_store/RegistrationFromStore'
-import {
-    PersonalInfoBasicFormSchema,
-    PersonalInfoBasicFormSchemaType,
-} from '../../_schema'
+} from '@/constants'
 import {
     Enum_Componentcommonaddress_State,
     Enum_Componentparticipantpersonaldetails_Gender,
 } from '@/graphql/types'
+
+import {
+    PersonalInfoBasicFormSchema,
+    PersonalInfoBasicFormSchemaType,
+} from '../../_schema'
+import { useRegistrationFormStore } from '../../_store/RegistrationFromStore'
 
 interface PersonalInfoFormProps {
     formId: string
@@ -164,7 +164,6 @@ const PersonalInfoForm = ({ formId, nextStep }: PersonalInfoFormProps) => {
     // ==============================================================================================
 
     const onContinue = (data: any) => {
-        console.log('All fields validated!', data)
         updateFormData(formId, data)
         nextStep()
     }

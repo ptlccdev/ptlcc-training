@@ -6,7 +6,7 @@ import {
     EMPLOYMENT_INFO_FIELDS,
     WORK_ADDRESS_FIELDS,
     ACCOUNT_FIELDS,
-} from '@/lib/constants'
+} from '@/constants'
 
 // =================================================================================================
 //                                       TYPES

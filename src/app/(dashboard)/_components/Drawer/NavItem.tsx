@@ -22,12 +22,12 @@ const NavItem = ({ title, Icon, route }: NavItemProps) => {
             replace
             href={`${route}`}
             className={cn(
-                'flex h-full w-full flex-row items-center px-4 py-2 text-sm text-slate-400',
-                `${isActive && 'rounded-lg bg-white bg-opacity-5 text-white transition duration-500 ease-out'}`,
-                'hover:rounded-lg hover:bg-white hover:bg-opacity-5'
+                'flex h-full w-full flex-row items-center rounded-lg px-4 py-2 text-sm text-slate-500',
+                `${isActive && 'duration-400 bg-drawerBgActive bg-opacity-50 text-slate-100 transition ease-out'}`,
+                `${!isActive && 'hover:bg-slate-800'}`
             )}
         >
-            <span className={`mr-2 ${isActive && 'text-secondaryColor'}`}>
+            <span className={`mr-2 ${isActive && 'text-slate-100'}`}>
                 {Icon}
             </span>
             <span className='font-semibold'>{title}</span>

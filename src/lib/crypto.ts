@@ -1,4 +1,4 @@
-// console.log('process.env.ENCRYPTION_SECRET', process.env.ENCRYPTION_SECRET)
+'use server'
 const secretKey = process.env.ENCRYPTION_SECRET
 
 export const encryptData = async (plainText: string): Promise<string> => {

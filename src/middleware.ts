@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from 'next/server'
-import { COOKIES } from './lib/constants'
+import { COOKIES } from './constants'
 import { decryptData } from './lib/crypto'
 import { Session } from './types'
 
@@ -7,11 +7,6 @@ export async function middleware(request: NextRequest) {
     // URL and Pathname
     const url = new URL(request.url)
     const pathname = url.pathname
-
-    // console.log('pathname', pathname === '/')
-    // if (pathname === '/') {
-    //     NextResponse.redirect(new URL('/profile', request.url))
-    // }
 
     // Session validation
     const currentEncryptedSession = request.cookies.get(COOKIES.SESSION)?.value
@@ -46,5 +41,4 @@ export async function middleware(request: NextRequest) {
 export const config = {
     matcher:
         '/((?!api|_next/static|_next/image|login|register|forgot-password|reset-password|favicon.ico).*)',
-    // matcher: '/((?!api|_next/static|select-mode|_next/image|favicon.ico).*)',
 }

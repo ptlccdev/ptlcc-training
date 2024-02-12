@@ -1,7 +1,7 @@
 import { z } from 'zod'
-import { ACCOUNT_FIELDS, CUSTOM_FIELDS } from '@/lib/constants'
 import { passwordStrength } from 'check-password-strength'
 
+import { ACCOUNT_FIELDS, CUSTOM_FIELDS } from '@/constants'
 import { simplify, manualFetchGraphQL } from '@/lib/utils'
 import { CheckEmailExists } from '@/graphql/queries'
 
@@ -53,11 +53,3 @@ export const AccountFieldsSchema = z
     })
 
 export type AccountFieldsSchemaType = z.infer<typeof AccountFieldsSchema>
-
-// =================================================================================================
-//                          TODOs
-// =================================================================================================
-// .refine(data => data.password === data.confirmPassword, {
-//     message: "Passwords don't match",
-//     path: ['confirmPassword'], // path of error
-// })
