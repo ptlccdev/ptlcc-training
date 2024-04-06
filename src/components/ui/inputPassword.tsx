@@ -56,7 +56,7 @@ const PasswordStrengthBar = ({
 
     return (
         <>
-            <div className=' flex h-[4px] flex-row items-center'>
+            <div className='flex h-[4px] flex-row items-center'>
                 {[...Array(4)].flatMap((_, index) => [
                     <div
                         key={nanoid()}
@@ -64,7 +64,7 @@ const PasswordStrengthBar = ({
                     >
                         &nbsp;
                     </div>,
-                    index <= 3 && (
+                    index < 3 && (
                         <div key={nanoid()} className='w-[8px]'>
                             &nbsp;
                         </div>

@@ -13,7 +13,7 @@ const fetchUserProfile = async () => {
     const { data: session } = await getSessionData()
     const { data, error } = await getClient().query({
         query: GetUserProfile,
-        variables: { usersPermissionsUserId: session?.user.id },
+        variables: { usersPermissionsUserId: session?.user.id || '' },
     })
 
     if (error) {
@@ -40,7 +40,7 @@ const ProfilePage = async () => {
                 <div>•</div>
                 <div>Profile</div>
             </div>
-            <div className='flex h-full flex-row items-start justify-center gap-10'>
+            <div className='flex h-full w-full flex-row flex-wrap items-start justify-between gap-6'>
                 <PersonalDetailsCard
                     personalDetails={
                         usersPermissionsUser?.participant

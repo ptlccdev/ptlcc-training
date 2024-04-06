@@ -9,7 +9,7 @@ import {
 import { SimpleType } from './lib/utils'
 
 export type RegistationPayload = {
-    customRegisterInput: UsersPermissionsRegisterInput
+    input: UsersPermissionsRegisterInput
 }
 
 export type LoginPayload = {
@@ -41,13 +41,19 @@ export type JobInformations = NonNullable<
     >['jobInformation']
 >
 
-export type Trainings = NonNullable<
-    NonNullable<
-        NonNullable<
-            SimpleType<GetUserTrainingQuery>['usersPermissionsUser']
-        >['participant']
-    >['trainings']
->
+export type SimplifiedTrainings = NonNullable<
+    NonNullable<SimpleType<GetUserTrainingQuery>['trainings']>[number]
+>[]
+
+export type Trainings = (Omit<SimplifiedTrainings[number], 'Sessions'> & {
+    trainingDate: string
+    certificate: {
+        issuedDate: string
+        validityPeriod: number
+        url: string
+        name: string
+    }
+})[]
 
 export type Unpacked<T> = T extends (infer U)[] ? U : T
 

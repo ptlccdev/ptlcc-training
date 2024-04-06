@@ -6,6 +6,7 @@ import type { DocumentNode, TypedDocumentNode } from '@apollo/client'
 import { Session } from '@/types'
 import { cookies } from 'next/headers'
 import { decryptData } from './crypto'
+import { getSessionData } from '@/actions'
 
 // =================================================================================================
 //                                       UTILITY
@@ -47,30 +48,6 @@ export const setFocusToEnd = (element: HTMLInputElement) => {
 }
 
 // =================================================================================================
-//                                     AUTH TOKEN
-// =================================================================================================
-export function getAuthToken(): string {
-    // Implement the logic to retrieve your authentication token here
-    return '76d001caeac6f918405dc2cf087c70faf8612c8ab29b53bd84dfe0c5ae8306eb20a0009e961f1c5d7a664e55af94b92bf6e5a4e785ae29d6041dc32c77416d956bb427500f37950926c43ad41c6729c7595f9ce4de01d1aa416d63ee06d594b5f749606f2e42fe56cd6f2cd5f420811fb11b27388eec4329484b9fe992e60c38'
-}
-
-// =================================================================================================
-//                                     GET SESSION (FOR SERVER COMPONENT ONLY)
-// =================================================================================================
-
-// export async function getSessionData(): Promise<Session> {
-//     try {
-//         const currentEncryptedSession = cookies().get(COOKIES.SESSION)?.value
-//         const currentSession = JSON.parse(
-//             await decryptData(currentEncryptedSession!)
-//         )
-//         return currentSession
-//     } catch (_) {
-//         throw new Error('Failed to decrypt session')
-//     }
-// }
-
-// =================================================================================================
 //                                     MANUAL GRAPHQL REQUEST
 // =================================================================================================
 
@@ -84,25 +61,18 @@ export interface GraphQLResponse<T> {
     data: T
     errors?: Array<{ message: string }>
 }
-
-// export declare function useQuery<
-//     TData = any,
-//     TVariables extends OperationVariables = OperationVariables,
-// >(
-//     query: DocumentNode | TypedDocumentNode<TData, TVariables>,
-//     options?: QueryHookOptions<NoInfer<TData>, NoInfer<TVariables>>
-// ): QueryResult<TData, TVariables>
-
 export async function manualFetchGraphQL<V, TData>(
     rawQuery: DocumentNode | TypedDocumentNode<TData>,
     variables: V | undefined
 ): Promise<TData> {
     const query = print(rawQuery)
+    const { data: session } = await getSessionData()
+    const token = session?.jwt
     const response = await fetch(STRAPI_GRAPHQL_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${getAuthToken()}`,
+            ...(token && { Authorization: `Bearer ${token}` }),
         },
         body: JSON.stringify({ query, variables }),
     })

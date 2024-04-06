@@ -6,7 +6,10 @@ input UsersPermissionsRegisterInput {
 }
 
 type Mutation {
-    customRegister(
+    """
+    Register a user
+    """
+    register(
         input: UsersPermissionsRegisterInput!
     ): UsersPermissionsLoginPayload!
     createParticipant(data: ParticipantInput!): ParticipantEntityResponse
@@ -45,6 +48,12 @@ type Mutation {
     deleteContentReleasesReleaseAction(
         id: ID!
     ): ContentReleasesReleaseActionEntityResponse
+    createSlugifySlug(data: SlugifySlugInput!): SlugifySlugEntityResponse
+    updateSlugifySlug(
+        id: ID!
+        data: SlugifySlugInput!
+    ): SlugifySlugEntityResponse
+    deleteSlugifySlug(id: ID!): SlugifySlugEntityResponse
     upload(
         refId: ID
         ref: String
@@ -101,13 +110,6 @@ type Mutation {
     """
     deleteUsersPermissionsUser(id: ID!): UsersPermissionsUserEntityResponse!
     login(input: UsersPermissionsLoginInput!): UsersPermissionsLoginPayload!
-
-    """
-    Register a user
-    """
-    register(
-        input: UsersPermissionsRegisterInput!
-    ): UsersPermissionsLoginPayload!
 
     """
     Request a reset password token
@@ -447,23 +449,72 @@ type ComponentCommonAddress {
     state: ENUM_COMPONENTCOMMONADDRESS_STATE!
 }
 
-input ComponentCommonTrainingItemsFiltersInput {
-    training: TrainingFiltersInput
-    and: [ComponentCommonTrainingItemsFiltersInput]
-    or: [ComponentCommonTrainingItemsFiltersInput]
-    not: ComponentCommonTrainingItemsFiltersInput
+input ComponentCommonCertificateFiltersInput {
+    issuedDate: DateFilterInput
+    validityPeriod: IntFilterInput
+    and: [ComponentCommonCertificateFiltersInput]
+    or: [ComponentCommonCertificateFiltersInput]
+    not: ComponentCommonCertificateFiltersInput
 }
 
-input ComponentCommonTrainingItemsInput {
+input ComponentCommonCertificateInput {
     id: ID
-    training: ID
-    certificate: ID
+    issuedDate: Date
+    validityPeriod: Int
 }
 
-type ComponentCommonTrainingItems {
+type ComponentCommonCertificate {
     id: ID!
-    training: TrainingEntityResponse
-    certificate: UploadFileEntityResponse!
+    issuedDate: Date
+    validityPeriod: Int
+}
+
+input ComponentCommonTrainingParticipantsFiltersInput {
+    participant: ParticipantFiltersInput
+    identifier: StringFilterInput
+    and: [ComponentCommonTrainingParticipantsFiltersInput]
+    or: [ComponentCommonTrainingParticipantsFiltersInput]
+    not: ComponentCommonTrainingParticipantsFiltersInput
+}
+
+input ComponentCommonTrainingParticipantsInput {
+    id: ID
+    Certificate: ID
+    participant: ID
+    identifier: String
+}
+
+type ComponentCommonTrainingParticipants {
+    id: ID!
+    Certificate: UploadFileEntityResponse
+    participant: ParticipantEntityResponse
+}
+
+input ComponentCommonTrainingSessionFiltersInput {
+    date: DateFilterInput
+    Participants: ComponentCommonTrainingParticipantsFiltersInput
+    certificateInfo: ComponentCommonCertificateFiltersInput
+    and: [ComponentCommonTrainingSessionFiltersInput]
+    or: [ComponentCommonTrainingSessionFiltersInput]
+    not: ComponentCommonTrainingSessionFiltersInput
+}
+
+input ComponentCommonTrainingSessionInput {
+    id: ID
+    date: Date
+    Participants: [ComponentCommonTrainingParticipantsInput]
+    certificateInfo: ComponentCommonCertificateInput
+}
+
+type ComponentCommonTrainingSession {
+    id: ID!
+    date: Date
+    Participants(
+        filters: ComponentCommonTrainingParticipantsFiltersInput
+        pagination: PaginationArg = {}
+        sort: [String] = []
+    ): [ComponentCommonTrainingParticipants]
+    certificateInfo: ComponentCommonCertificate
 }
 
 input ComponentParticipantJobInformationFiltersInput {
@@ -503,7 +554,6 @@ enum ENUM_COMPONENTPARTICIPANTPERSONALDETAILS_GENDER {
 input ComponentParticipantPersonalDetailsFiltersInput {
     firstName: StringFilterInput
     lastName: StringFilterInput
-    fullName: StringFilterInput
     gender: StringFilterInput
     dob: DateFilterInput
     residentialAddress: ComponentCommonAddressFiltersInput
@@ -518,7 +568,6 @@ input ComponentParticipantPersonalDetailsInput {
     id: ID
     firstName: String
     lastName: String
-    fullName: String
     gender: ENUM_COMPONENTPARTICIPANTPERSONALDETAILS_GENDER
     dob: Date
     residentialAddress: ComponentCommonAddressInput
@@ -530,7 +579,6 @@ type ComponentParticipantPersonalDetails {
     id: ID!
     firstName: String
     lastName: String
-    fullName: String
     gender: ENUM_COMPONENTPARTICIPANTPERSONALDETAILS_GENDER
     dob: Date
     residentialAddress: ComponentCommonAddress
@@ -542,8 +590,8 @@ input ParticipantFiltersInput {
     id: IDFilterInput
     personalDetails: ComponentParticipantPersonalDetailsFiltersInput
     jobInformation: ComponentParticipantJobInformationFiltersInput
-    trainings: ComponentCommonTrainingItemsFiltersInput
     auth: UsersPermissionsUserFiltersInput
+    fullName: StringFilterInput
     createdAt: DateTimeFilterInput
     updatedAt: DateTimeFilterInput
     and: [ParticipantFiltersInput]
@@ -554,19 +602,15 @@ input ParticipantFiltersInput {
 input ParticipantInput {
     personalDetails: ComponentParticipantPersonalDetailsInput
     jobInformation: ComponentParticipantJobInformationInput
-    trainings: [ComponentCommonTrainingItemsInput]
     auth: ID
+    fullName: String
 }
 
 type Participant {
     personalDetails: ComponentParticipantPersonalDetails
     jobInformation: ComponentParticipantJobInformation
-    trainings(
-        filters: ComponentCommonTrainingItemsFiltersInput
-        pagination: PaginationArg = {}
-        sort: [String] = []
-    ): [ComponentCommonTrainingItems]
     auth: UsersPermissionsUserEntityResponse
+    fullName: String
     createdAt: DateTime
     updatedAt: DateTime
 }
@@ -586,17 +630,16 @@ type ParticipantEntityResponseCollection {
 }
 
 enum ENUM_TRAINING_TYPE {
-    Type_I
-    Type_II
-    Type_III
+    Laboratory
+    Laboratory_Competency
 }
 
 input TrainingFiltersInput {
     id: IDFilterInput
     code: StringFilterInput
     name: StringFilterInput
-    dateValidity: DateFilterInput
     type: StringFilterInput
+    Sessions: ComponentCommonTrainingSessionFiltersInput
     createdAt: DateTimeFilterInput
     updatedAt: DateTimeFilterInput
     and: [TrainingFiltersInput]
@@ -607,15 +650,19 @@ input TrainingFiltersInput {
 input TrainingInput {
     code: String
     name: String
-    dateValidity: Date
     type: ENUM_TRAINING_TYPE
+    Sessions: [ComponentCommonTrainingSessionInput]
 }
 
 type Training {
     code: String!
     name: String!
-    dateValidity: Date
-    type: ENUM_TRAINING_TYPE!
+    type: ENUM_TRAINING_TYPE
+    Sessions(
+        filters: ComponentCommonTrainingSessionFiltersInput
+        pagination: PaginationArg = {}
+        sort: [String] = []
+    ): [ComponentCommonTrainingSession]
     createdAt: DateTime
     updatedAt: DateTime
 }
@@ -1049,9 +1096,48 @@ type UsersPermissionsUserRelationResponseCollection {
     data: [UsersPermissionsUserEntity!]!
 }
 
+input SlugifySlugFiltersInput {
+    id: IDFilterInput
+    slug: StringFilterInput
+    count: IntFilterInput
+    createdAt: DateTimeFilterInput
+    updatedAt: DateTimeFilterInput
+    and: [SlugifySlugFiltersInput]
+    or: [SlugifySlugFiltersInput]
+    not: SlugifySlugFiltersInput
+}
+
+input SlugifySlugInput {
+    slug: String
+    count: Int
+}
+
+type SlugifySlug {
+    slug: String
+    count: Int
+    createdAt: DateTime
+    updatedAt: DateTime
+}
+
+type SlugifySlugEntity {
+    id: ID
+    attributes: SlugifySlug
+}
+
+type SlugifySlugEntityResponse {
+    data: SlugifySlugEntity
+}
+
+type SlugifySlugEntityResponseCollection {
+    data: [SlugifySlugEntity!]!
+    meta: ResponseCollectionMeta!
+}
+
 union GenericMorph =
     | ComponentCommonAddress
-    | ComponentCommonTrainingItems
+    | ComponentCommonCertificate
+    | ComponentCommonTrainingParticipants
+    | ComponentCommonTrainingSession
     | ComponentParticipantJobInformation
     | ComponentParticipantPersonalDetails
     | Participant
@@ -1064,6 +1150,7 @@ union GenericMorph =
     | UsersPermissionsPermission
     | UsersPermissionsRole
     | UsersPermissionsUser
+    | SlugifySlug
 
 input FileInfoInput {
     name: String
@@ -1178,5 +1265,11 @@ type Query {
         pagination: PaginationArg = {}
         sort: [String] = []
     ): UsersPermissionsUserEntityResponseCollection
+    slugifySlug(id: ID): SlugifySlugEntityResponse
+    slugifySlugs(
+        filters: SlugifySlugFiltersInput
+        pagination: PaginationArg = {}
+        sort: [String] = []
+    ): SlugifySlugEntityResponseCollection
     me: UsersPermissionsMe
 }

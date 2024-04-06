@@ -60,7 +60,7 @@ const PersonalInfoForm = ({ formId, nextStep }: PersonalInfoFormProps) => {
         personalInfo: {
             firstName,
             lastName,
-            fullName,
+            // fullName,
             gender,
             dob,
             phoneNumber,
@@ -90,7 +90,7 @@ const PersonalInfoForm = ({ formId, nextStep }: PersonalInfoFormProps) => {
         defaultValues: {
             firstName,
             lastName,
-            fullName,
+            // fullName,
             phoneNumber,
             homeNumber,
             addressLine1,
@@ -169,6 +169,7 @@ const PersonalInfoForm = ({ formId, nextStep }: PersonalInfoFormProps) => {
     }
 
     const onSelectGender = (val: string) => {
+        console.log('wtf', val)
         setValue(BASIC_INFO_FIELDS.GENDER, val, { shouldValidate: true })
     }
     const onSelectState = (val: string) => {
@@ -256,7 +257,7 @@ const PersonalInfoForm = ({ formId, nextStep }: PersonalInfoFormProps) => {
                                     message={errors.lastName?.message}
                                 />
                             </div>
-                            <div className='col-span-6 flex flex-col space-y-1.5'>
+                            {/* <div className='col-span-6 flex flex-col space-y-1.5'>
                                 <Label htmlFor={BASIC_INFO_FIELDS.FULL_NAME}>
                                     Full Name
                                 </Label>
@@ -269,7 +270,7 @@ const PersonalInfoForm = ({ formId, nextStep }: PersonalInfoFormProps) => {
                                 <ErrorFieldMessage
                                     message={errors.fullName?.message}
                                 />
-                            </div>
+                            </div> */}
                             <div className='col-span-6 flex flex-col space-y-1.5 md:col-span-3'>
                                 <Label
                                     htmlFor={BASIC_INFO_FIELDS.GENDER}
@@ -279,7 +280,8 @@ const PersonalInfoForm = ({ formId, nextStep }: PersonalInfoFormProps) => {
                                 </Label>
                                 <Select
                                     onValueChange={onSelectGender}
-                                    defaultValue={currentGender}
+                                    value={currentGender}
+                                    // defaultValue={currentGender}
                                 >
                                     <SelectTrigger
                                         id={BASIC_INFO_FIELDS.GENDER}
@@ -522,7 +524,7 @@ const PersonalInfoForm = ({ formId, nextStep }: PersonalInfoFormProps) => {
                                                 value={state}
                                                 key={nanoid()}
                                             >
-                                                {state}
+                                                {state.replace(/_/g, ' ')}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>

@@ -8,11 +8,10 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
 import { ChevronLeftIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
-import SendRequestButton from './_components/SendRequestButton'
 import { ForgotPasswordSvg } from '@/components/svgs'
+import ForgotPasswordForm from './_components/ForgotPasswordForm'
 
 const ForgotPasswordPage = () => {
     return (
@@ -23,7 +22,7 @@ const ForgotPasswordPage = () => {
                     'linear-gradient(to top, #09203f 0%, #537895 100%)',
             }}
         >
-            <Card className='flex h-[95%] w-[90%] flex-col justify-center overflow-auto px-2 py-4 shadow-2xl md:w-[453px]'>
+            <Card className='flex flex-col justify-center overflow-auto px-2 py-4 shadow-2xl md:w-[453px]'>
                 <div className='flex items-center justify-center'>
                     <ForgotPasswordSvg
                         className='h-[250px] w-[350px]'
@@ -36,25 +35,14 @@ const ForgotPasswordPage = () => {
                     </CardTitle>
                     <CardDescription className='text-center'>
                         Please enter the email address associated with your
-                        account, and we&apos;ll email you a 6-digit confirmation
-                        code to reset your password
+                        account, and we&apos;ll email you a link to reset your
+                        password
                     </CardDescription>
                 </CardHeader>
-                <CardContent className='mt-4'>
-                    <form>
-                        <div className='grid w-full items-center gap-4'>
-                            <div className='flex flex-col space-y-1.5'>
-                                <Input
-                                    id='name'
-                                    className='h-12'
-                                    placeholder='Email address'
-                                />
-                            </div>
-                        </div>
-                    </form>
+                <CardContent className='mt-0 py-0'>
+                    <ForgotPasswordForm />
                 </CardContent>
                 <CardFooter className='flex flex-col items-center'>
-                    <SendRequestButton />
                     <Link
                         href={'/login'}
                         className='row mt-8 flex items-center '

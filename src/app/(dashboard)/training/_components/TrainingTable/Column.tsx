@@ -13,8 +13,14 @@ import {
 import { ColumnDef } from '@tanstack/react-table'
 import { STRAPI_GRAPHQL } from '@/constants'
 import { Badge } from '@/components/ui/badge'
-import { ArrowUpDown, MoreHorizontal } from 'lucide-react'
-import { format } from 'date-fns'
+import {
+    ArrowUpDown,
+    CalendarRange,
+    ExternalLink,
+    MoreHorizontal,
+    TicketCheck,
+} from 'lucide-react'
+import { addYears, format, isWithinInterval } from 'date-fns'
 import {
     Tooltip,
     TooltipContent,
@@ -22,11 +28,11 @@ import {
     TooltipTrigger,
 } from '@/components/ui/tooltip'
 
-export type TrainingColumn = NonNullable<
-    NonNullable<Trainings[number]>
->['training'] & {
-    certificate: NonNullable<NonNullable<Trainings[number]>>['certificate']
-}
+// export type TrainingColumn = NonNullable<
+//     NonNullable<Trainings[number]>
+// >['training'] & {
+//     certificate: NonNullable<NonNullable<Trainings[number]>>['certificate']
+// }
 const processColumn = (): ColumnDef<Unpacked<Trainings>>[] => {
     const handleClick = async (fileUrl: string, name: string) => {
         const response = await fetch(`${STRAPI_GRAPHQL}${fileUrl}`)
@@ -46,7 +52,7 @@ const processColumn = (): ColumnDef<Unpacked<Trainings>>[] => {
     return [
         {
             id: 'code',
-            accessorKey: 'training.code',
+            accessorKey: 'code',
             header: () => {
                 return (
                     <div className='flex flex-row items-center justify-start'>
@@ -59,7 +65,7 @@ const processColumn = (): ColumnDef<Unpacked<Trainings>>[] => {
                 return (
                     <div className='flex items-center justify-start'>
                         <Badge className='bg-primaryColor'>
-                            {original?.training?.code}
+                            {original?.code}
                         </Badge>
                     </div>
                 )
@@ -67,7 +73,7 @@ const processColumn = (): ColumnDef<Unpacked<Trainings>>[] => {
         },
         {
             id: 'name',
-            accessorKey: 'training.name',
+            accessorKey: 'name',
             header: ({ column }) => {
                 return (
                     <div className='flex flex-row items-center'>
@@ -86,13 +92,13 @@ const processColumn = (): ColumnDef<Unpacked<Trainings>>[] => {
             },
         },
         {
-            id: 'dateValidity',
-            accessorKey: 'training.dateValidity',
+            id: 'date',
+            accessorKey: 'trainingDate',
             header: ({ column }) => {
                 return (
-                    <div className='flex flex-row items-center justify-center'>
+                    <div className='flex flex-row items-center justify-center text-nowrap'>
                         <CalendarIcon className='mr-2 inline h-6 w-6 text-secondaryColor' />
-                        Date Validity
+                        Training Date
                         <ArrowUpDown
                             className='ml-2 inline h-4 w-4 cursor-pointer text-slate-600 transition duration-300 ease-out hover:scale-110 hover:text-slate-100'
                             onClick={() =>
@@ -107,11 +113,8 @@ const processColumn = (): ColumnDef<Unpacked<Trainings>>[] => {
             cell: ({ row: { original } }) => {
                 return (
                     <>
-                        {original?.training?.dateValidity &&
-                            format(
-                                original?.training?.dateValidity,
-                                'dd/MM/yyyy'
-                            )}
+                        {original?.trainingDate &&
+                            format(original?.trainingDate, 'dd/MM/yyyy')}
                     </>
                 )
             },
@@ -121,12 +124,94 @@ const processColumn = (): ColumnDef<Unpacked<Trainings>>[] => {
         },
         {
             id: 'type',
-            accessorKey: 'training.type',
+            accessorKey: 'type',
+            header: () => {
+                return (
+                    <div className='flex flex-row items-center justify-center text-nowrap'>
+                        <IdCardIcon className='mr-3 inline h-6 w-6 text-secondaryColor' />
+                        Type
+                    </div>
+                )
+            },
+            filterFn: ({ original }, _, filterValue) => {
+                if (
+                    filterValue.length === 0 ||
+                    filterValue.includes(original?.type)
+                ) {
+                    return true
+                }
+
+                return false
+            },
+            cell: ({ row: { original } }) => (
+                <>{original?.type?.replace(/_/g, ' ')}</>
+            ),
+            meta: {
+                align: 'center',
+            },
+        },
+        {
+            id: 'validity',
+            accessorKey: 'validity',
             header: () => {
                 return (
                     <div className='flex flex-row items-center justify-center'>
-                        <IdCardIcon className='mr-3 inline h-6 w-6 text-secondaryColor' />
-                        Type
+                        <TicketCheck className='mr-3 inline h-6 w-6 text-secondaryColor' />
+                        Validity
+                    </div>
+                )
+            },
+            cell: ({ row: { original } }) => {
+                const isValid = isWithinInterval(new Date(), {
+                    start: new Date(original?.certificate.issuedDate),
+                    end: addYears(
+                        new Date(original?.certificate.issuedDate),
+                        original?.certificate.validityPeriod
+                    ),
+                })
+                console.log()
+                return (
+                    <div className='flex items-center justify-center'>
+                        <Badge
+                            className={`px-3 py-1 font-bold ${isValid ? 'bg-green-600' : 'bg-red-600'}`}
+                        >
+                            {isValid ? 'Valid' : 'Invalid'}
+                        </Badge>
+                    </div>
+                )
+            },
+            meta: {
+                align: 'center',
+            },
+        },
+        {
+            id: 'validityPeriod',
+            header: ({ column }) => {
+                return (
+                    <div className='flex flex-row items-center justify-center text-nowrap'>
+                        <CalendarRange className='mr-2 inline h-6 w-6 text-secondaryColor' />
+                        Validity Period
+                    </div>
+                )
+            },
+            cell: ({ row: { original } }) => {
+                const start = format(
+                    original.certificate.issuedDate,
+                    'dd/MM/yyyy'
+                )
+                const end = format(
+                    addYears(
+                        new Date(original?.certificate.issuedDate),
+                        original?.certificate.validityPeriod
+                    ),
+                    'dd/MM/yyyy'
+                )
+
+                return (
+                    <div className='flex flex-row items-center justify-center'>
+                        <Badge variant={'outline'}>{start}</Badge>
+                        <div className='mx-1'>-</div>
+                        <Badge variant={'outline'}>{start}</Badge>
                     </div>
                 )
             },
@@ -147,18 +232,27 @@ const processColumn = (): ColumnDef<Unpacked<Trainings>>[] => {
             },
             cell: ({ row: { original } }) => {
                 return (
-                    <div className='flex flex-row items-center justify-start gap-7'>
-                        <div className='w-40 overflow-hidden text-ellipsis whitespace-nowrap'>
-                            <a
-                                className='cursor-pointer hover:text-secondaryColor hover:underline'
-                                href={`${STRAPI_GRAPHQL}${original?.certificate?.url}`}
-                                target='_blank'
-                            >
-                                {original?.certificate?.name!}
-                            </a>
-                        </div>
+                    <div className='flex flex-row items-center justify-center gap-4'>
                         <TooltipProvider>
-                            <Tooltip>
+                            <Tooltip delayDuration={400}>
+                                <TooltipTrigger asChild>
+                                    <div className='shrink-0 grow-0 cursor-pointer text-black transition duration-300 ease-out hover:scale-125 hover:text-secondaryColor'>
+                                        <a
+                                            className='cursor-pointer hover:text-secondaryColor hover:underline'
+                                            href={`${STRAPI_GRAPHQL}${original?.certificate?.url}`}
+                                            target='_blank'
+                                        >
+                                            <ExternalLink className='h-4 w-4' />
+                                        </a>
+                                    </div>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>Open</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                        <TooltipProvider>
+                            <Tooltip delayDuration={400}>
                                 <TooltipTrigger asChild>
                                     <div className='shrink-0 grow-0 cursor-pointer text-black transition duration-300 ease-out hover:scale-125 hover:text-secondaryColor'>
                                         <DownloadIcon
@@ -173,7 +267,7 @@ const processColumn = (): ColumnDef<Unpacked<Trainings>>[] => {
                                     </div>
                                 </TooltipTrigger>
                                 <TooltipContent>
-                                    <p>Download the certificate</p>
+                                    <p>Download</p>
                                 </TooltipContent>
                             </Tooltip>
                         </TooltipProvider>

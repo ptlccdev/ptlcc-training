@@ -3,6 +3,7 @@ import { useState } from 'react'
 import {
     ColumnDef,
     ColumnFiltersState,
+    FilterFn,
     SortingState,
     flexRender,
     getCoreRowModel,
@@ -25,6 +26,7 @@ import { TablePageSize } from '@/constants'
 import { Trainings, Unpacked } from '@/types'
 import { Input } from '@/components/ui/input'
 import { Search } from 'lucide-react'
+import { MultiSelect } from '@/components/ui/multi-select'
 
 interface DataTableProps<Trainings, TValue> {
     columns: ColumnDef<Trainings, TValue>[]
@@ -58,12 +60,23 @@ const DataTable = <TData, TValue>({
         getFilteredRowModel: getFilteredRowModel(),
     })
 
+    const [selected, setSelected] = useState<string[]>([])
+    const TYPE_FILTER_OPTIONS = [
+        { label: 'Laboratory', value: 'Laboratory' },
+        { label: 'Laboratory Competency', value: 'Laboratory_Competency' },
+    ]
+
+    const onChange = (selected: string[]) => {
+        table.getColumn('type')?.setFilterValue(selected)
+        setSelected(selected)
+    }
+
     return (
-        <div className='w-full rounded-lg border shadow-lg'>
-            <div className='flex items-center justify-start gap-12 space-x-2 px-4 py-6 text-sm font-medium'>
-                <div className='relative w-6/12'>
+        <div className='w-min-[1400px] w-full overflow-y-scroll rounded-lg border shadow-lg'>
+            <div className='flex flex-col items-start justify-start gap-3 px-4 py-6 text-sm font-medium'>
+                <div className='relative w-full'>
                     <Input
-                        className='pr-10'
+                        className='h-12 pr-10'
                         placeholder='Search trainings...'
                         value={
                             (table
@@ -76,7 +89,21 @@ const DataTable = <TData, TValue>({
                                 ?.setFilterValue(event.target.value)
                         }
                     />
-                    <Search className='absolute right-3 top-1 hidden text-slate-400 md:block' />
+                    <Search className='absolute right-3 top-2 hidden text-slate-400 md:block' />
+                </div>
+                <div className='mt-4'>
+                    <span className='pl-1 font-bold'>
+                        {table.getFilteredRowModel().rows.length}
+                    </span>
+                    &nbsp;
+                    <span className='text-slate-500'>results found</span>
+                </div>
+                <div>
+                    <MultiSelect
+                        options={TYPE_FILTER_OPTIONS}
+                        selected={selected}
+                        onChange={onChange}
+                    />
                 </div>
             </div>
             <Table className='w-full' containerClassName=''>
@@ -115,7 +142,7 @@ const DataTable = <TData, TValue>({
                                 {row.getVisibleCells().map(cell => {
                                     return (
                                         <TableCell
-                                            className='px-6 py-4 font-medium'
+                                            className='border-b px-6 py-4 font-medium'
                                             key={cell.id}
                                             align={
                                                 (

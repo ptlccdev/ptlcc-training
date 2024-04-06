@@ -19,7 +19,7 @@ interface PaginationProps<TData> {
 }
 const Pagination = <TData,>({ table }: PaginationProps<TData>) => {
     return (
-        <div className='flex items-center justify-end gap-12 space-x-2 border-t px-4 py-4 text-sm font-medium'>
+        <div className='flex flex-col items-end justify-end gap-2 px-4 py-4 text-sm font-medium sm:flex-row sm:items-center sm:gap-12'>
             <div className='flex flex-row items-center '>
                 <div>Rows per page &nbsp;</div>
                 <Select
@@ -40,11 +40,12 @@ const Pagination = <TData,>({ table }: PaginationProps<TData>) => {
                     </SelectContent>
                 </Select>
             </div>
-            <div>
-                Page {table.getState().pagination.pageIndex + 1} of &nbsp;
-                {table.getPageCount()}
-            </div>
+
             <div className='flex flex-row items-center justify-center gap-2'>
+                <div>
+                    Page {table.getState().pagination.pageIndex + 1} of &nbsp;
+                    {table.getPageCount()}
+                </div>
                 <Button
                     variant='outline'
                     size='sm'

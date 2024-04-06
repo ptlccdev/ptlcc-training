@@ -12,10 +12,10 @@ export const PersonalInfoBasicFormSchema = z.object({
         .trim()
         .min(1, 'Please enter your last name')
         .regex(/^[a-z ,.'-]*$/i, 'Please enter a valid name'),
-    [`${BASIC_INFO_FIELDS.FULL_NAME}`]: z
-        .string()
-        .trim()
-        .regex(/^[a-z ,.'-]*$/i, 'Please enter a valid name'),
+    // [`${BASIC_INFO_FIELDS.FULL_NAME}`]: z
+    //     .string()
+    //     .trim()
+    //     .regex(/^[a-z ,.'-]*$/i, 'Please enter a valid name'),
     [`${BASIC_INFO_FIELDS.GENDER}`]: z.string({
         required_error: 'Please select your gender',
     }),

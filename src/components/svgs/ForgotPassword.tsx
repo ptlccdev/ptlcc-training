@@ -11,7 +11,7 @@ const SVGComponent = (props: SVGProps<SVGSVGElement>) => (
     >
         <style type='text/css'>
             {
-                '.st0{opacity:7.000000e-02;}\n\t.st1{fill:#2A94F4;}\n\t.st2{opacity:0.51;}\n\t.st3{fill:#09203f;}\n\t.st4{fill:#F7F7F7;}\n\t.st5{opacity:0.17;fill:#2A94F4;}\n\t.st6{clip-path:url(#SVGID_2_);fill:#2A94F4;}\n\t.st7{fill:#B97A59;}\n\t.st8{fill:#0B4870;}\n\t.st9{fill:#AA6B4F;}\n\t.st10{fill:#D3D3D3;}'
+                '.st0{opacity:7.000000e-02;}\n\t.st1{fill:#2A94F4;}\n\t.st2{opacity:0.51;}\n\t.st3{fill:#09203f;}\n\t.st4{fill:#F7F7F7;}\n\t.st5{opacity:0.17;fill:#2A94F4;}\n\t.st6{clipPath:url(#SVGID_2_);fill:#2A94F4;}\n\t.st7{fill:#B97A59;}\n\t.st8{fill:#0B4870;}\n\t.st9{fill:#AA6B4F;}\n\t.st10{fill:#D3D3D3;}'
             }
         </style>
         <g xmlns='http://www.w3.org/2000/svg' className='st0'>

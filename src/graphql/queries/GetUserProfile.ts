@@ -11,7 +11,6 @@ export default graphql(`
                                 personalDetails {
                                     firstName
                                     lastName
-                                    fullName
                                     gender
                                     dob
                                     residentialAddress {

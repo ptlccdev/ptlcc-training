@@ -4,9 +4,10 @@ import { ToasterToast } from '@/hooks/useToast'
 //                                       STRAPI
 // =================================================================================================
 
-export const STRAPI_GRAPHQL_URL =
-    'https://ptlcc-training-strapi-backend.orb.local/graphql'
-export const STRAPI_GRAPHQL = 'https://ptlcc-training-strapi-backend.orb.local/'
+export const STRAPI_GRAPHQL_URL = 'http://192.168.0.2:1337/graphql'
+// 'https://ptlcc-training-strapi-backend.orb.local/graphql'
+export const STRAPI_GRAPHQL = 'http://192.168.0.2:1337'
+// export const STRAPI_GRAPHQL = 'https://ptlcc-training-strapi-backend.orb.local'
 
 // =================================================================================================
 //                                       PERSONAL INFO FORM CONSTANTS
@@ -15,7 +16,7 @@ export const STRAPI_GRAPHQL = 'https://ptlcc-training-strapi-backend.orb.local/'
 export enum BASIC_INFO_FIELDS {
     FIRST_NAME = 'firstName',
     LAST_NAME = 'lastName',
-    FULL_NAME = 'fullName',
+    // FULL_NAME = 'fullName',
     GENDER = 'gender',
     DOB = 'dob',
     PHONE_NUMBER = 'phoneNumber',
@@ -144,3 +145,6 @@ export enum GENERIC_MESSAGE {
     SUCCESS = 'success',
     ERROR = 'error',
 }
+
+export const HEADER_HEIGHT = 4
+export const DRAWER_WIDTH = 16

@@ -18,13 +18,13 @@ interface PersonalDetailsCardProps {
 
 const PersonalDetailsCard = ({ personalDetails }: PersonalDetailsCardProps) => {
     return (
-        <Card className='grid w-full grid-cols-5 shadow-xl'>
-            <CardTitle className='col-span-1 flex w-full flex-col items-center rounded-l-xl bg-primaryColor px-4 py-4 text-lg leading-5 text-white'>
-                <BookUser className='mb-2 mr-auto inline h-10 w-10 text-secondaryColor' />
+        <Card className='w-full shadow-xl lg:w-[calc(50%-0.75rem)]'>
+            <CardTitle className='text-md flex w-full flex-row items-center justify-start rounded-t-xl p-6 py-4 text-lg text-black'>
+                <BookUser className='mr-2 inline h-6 w-6 text-primaryColor' />
                 Personal Details
             </CardTitle>
-            <CardContent className='col-span-4 grid w-full grid-cols-2 gap-4 p-6'>
-                <div className='col-span-1'>
+            <CardContent className='grid w-full grid-cols-2 gap-4 p-6 pt-0'>
+                <div className='col-span-2 md:col-span-1'>
                     <div className='text-md font-semibold'>First Name</div>
                     <Input
                         className='w-full font-medium text-gray-500'
@@ -32,7 +32,7 @@ const PersonalDetailsCard = ({ personalDetails }: PersonalDetailsCardProps) => {
                         defaultValue={personalDetails?.firstName || ''}
                     />
                 </div>
-                <div className='col-span-1'>
+                <div className='col-span-2 md:col-span-1'>
                     <div className='text-md font-semibold'>Last Name</div>
                     <Input
                         className='w-full font-medium text-gray-500'
@@ -45,10 +45,14 @@ const PersonalDetailsCard = ({ personalDetails }: PersonalDetailsCardProps) => {
                     <Input
                         className='w-full font-medium text-gray-500'
                         readOnly
-                        defaultValue={personalDetails?.fullName || ''}
+                        defaultValue={
+                            `${personalDetails?.firstName} ${personalDetails?.lastName}` ||
+                            ''
+                        }
+                        // defaultValue={personalDetails?.fullName || ''}
                     />
                 </div>
-                <div className='col-span-1'>
+                <div className='col-span-2 md:col-span-1'>
                     <div className='text-md font-semibold'>Gender</div>
                     <Input
                         className='w-full font-medium text-gray-500'
@@ -56,7 +60,7 @@ const PersonalDetailsCard = ({ personalDetails }: PersonalDetailsCardProps) => {
                         defaultValue={personalDetails?.gender || ''}
                     />
                 </div>
-                <div className='col-span-1'>
+                <div className='col-span-2 md:col-span-1'>
                     <div className='text-md font-semibold'>Date of Birth</div>
                     <Input
                         className='w-full font-medium text-gray-500'
@@ -67,7 +71,7 @@ const PersonalDetailsCard = ({ personalDetails }: PersonalDetailsCardProps) => {
                         }
                     />
                 </div>
-                <div className='col-span-1'>
+                <div className='col-span-2 md:col-span-1'>
                     <div className='text-md font-semibold'>Phone Number</div>
                     <Input
                         className='w-full font-medium text-gray-500'
@@ -75,7 +79,7 @@ const PersonalDetailsCard = ({ personalDetails }: PersonalDetailsCardProps) => {
                         defaultValue={personalDetails?.phoneNumber || ''}
                     />
                 </div>
-                <div className='col-span-1'>
+                <div className='col-span-2 md:col-span-1'>
                     <div className='text-md font-semibold'>Home Number</div>
                     <Input
                         className='w-full font-medium text-gray-500'
@@ -116,7 +120,10 @@ const PersonalDetailsCard = ({ personalDetails }: PersonalDetailsCardProps) => {
                         </div>
                         <div className='w-full'>
                             <div>
-                                {personalDetails?.residentialAddress?.state}
+                                {personalDetails?.residentialAddress?.state.replace(
+                                    /_/g,
+                                    ' '
+                                )}
                             </div>
                         </div>
                     </div>

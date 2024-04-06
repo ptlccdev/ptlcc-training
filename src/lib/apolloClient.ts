@@ -8,9 +8,10 @@ import { registerApolloClient } from '@apollo/experimental-nextjs-app-support/rs
 import { setContext } from '@apollo/client/link/context'
 import https from 'https'
 import { STRAPI_GRAPHQL_URL } from '../constants'
-import { getAuthToken } from './utils'
+import { getSessionData } from '@/actions'
 
 export const { getClient } = registerApolloClient(() => {
+    process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
     const errorLink = onError(({ graphQLErrors, networkError }) => {
         if (graphQLErrors)
             graphQLErrors.forEach(({ message, locations, path }) =>
@@ -18,29 +19,32 @@ export const { getClient } = registerApolloClient(() => {
                     `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
                 )
             )
-        if (networkError) console.error(`[Network error]: ${networkError}`)
+        if (networkError)
+            console.error(
+                `[Network error]: ${JSON.stringify(networkError, undefined, 4)} \n[stack]: ${networkError.stack}`
+            )
     })
 
     const httpLink = new HttpLink({
         uri: STRAPI_GRAPHQL_URL,
         fetchOptions: {
+            cache: 'no-store',
             ...(process.env.NODE_ENV === 'development' && {
                 agent: new https.Agent({ rejectUnauthorized: false }),
             }),
         },
     })
-    const authLink = setContext((_, { headers }) => {
-        // get the authentication token from local storage if it exists
-        const token = getAuthToken()
+    const authLink = setContext(async (_, { headers }) => {
+        const { data: session } = await getSessionData()
+        const token = session?.jwt
         return {
             headers: {
                 ...headers,
-                authorization: token ? `Bearer ${token}` : '',
+                ...(token && { Authorization: `Bearer ${token}` }),
             },
         }
     })
 
-    process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
     return new NextSSRApolloClient({
         cache: new NextSSRInMemoryCache(),
         link: authLink.concat(errorLink).concat(httpLink),

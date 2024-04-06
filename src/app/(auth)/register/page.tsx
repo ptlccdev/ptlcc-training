@@ -2,10 +2,8 @@ import React from 'react'
 import Link from 'next/link'
 import RegistrationStepper from './_components/RegistrationStepper'
 import { JoySvg } from '@/components/svgs'
-import { wait } from '@/lib/utils'
 
 const RegisterPage = async () => {
-    await wait(1000)
     return (
         <div className='grid h-screen w-screen grid-cols-5'>
             <div className='z-10 col-span-5 flex flex-1 flex-col items-center py-12 md:overflow-auto lg:col-span-3'>

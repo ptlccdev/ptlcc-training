@@ -10,8 +10,8 @@ import {
 import { ApolloLink, HttpLink } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { STRAPI_GRAPHQL_URL } from '@/constants'
-import { getAuthToken } from '@/lib/utils'
 import { onError } from '@apollo/client/link/error'
+import { getSessionData } from '@/actions'
 
 const makeClient = () => {
     const errorLink = onError(({ graphQLErrors, networkError }) => {
@@ -26,19 +26,16 @@ const makeClient = () => {
 
     const httpLink = new HttpLink({
         uri: STRAPI_GRAPHQL_URL,
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${getAuthToken()}`,
-        },
     })
 
-    const authLink = setContext((_, { headers }) => {
+    const authLink = setContext(async (_, { headers }) => {
         // get the authentication token from local storage if it exists
-        const token = localStorage.getItem('token') || getAuthToken()
+        const { data: session } = await getSessionData()
+        const token = session?.jwt
         return {
             headers: {
                 ...headers,
-                authorization: token ? `Bearer ${token}` : '',
+                ...(token && { Authorization: `Bearer ${token}` }),
             },
         }
     })

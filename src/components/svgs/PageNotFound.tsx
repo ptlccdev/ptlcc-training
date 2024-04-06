@@ -20,7 +20,7 @@ const SVGComponent = (props: SVGProps<SVGSVGElement>) => (
                 y2='255.66'
                 gradientUnits='userSpaceOnUse'
             >
-                <stop offset='0' stop-opacity='0' />
+                <stop offset='0' stopOpacity='0' />
                 <stop offset='0.99' />
             </linearGradient>
             <linearGradient

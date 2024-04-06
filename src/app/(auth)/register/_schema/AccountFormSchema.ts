@@ -3,7 +3,7 @@ import { passwordStrength } from 'check-password-strength'
 
 import { ACCOUNT_FIELDS, CUSTOM_FIELDS } from '@/constants'
 import { simplify, manualFetchGraphQL } from '@/lib/utils'
-import { CheckEmailExists } from '@/graphql/queries'
+import { CheckEmailExists, CheckUsernameExists } from '@/graphql/queries'
 
 export const AccountFieldsSchema = z
     .object({
@@ -15,7 +15,14 @@ export const AccountFieldsSchema = z
             .regex(
                 /^[A-Za-z][A-Za-z0-9_]{7,29}$/,
                 'Username should only include letters, numbers, and underscores'
-            ),
+            )
+            .refine(async value => {
+                const data = await manualFetchGraphQL(CheckUsernameExists, {
+                    username: value,
+                })
+                const { usersPermissionsUsers } = simplify(data)
+                return usersPermissionsUsers?.length === 0 ? true : false
+            }, 'Username is already in use. Please register with a different username.'),
         [`${ACCOUNT_FIELDS.EMAIL}`]: z
             .string()
             .min(1, 'Please enter your personal email address')

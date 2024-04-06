@@ -14,22 +14,22 @@ interface JobInformationProps {
 
 const JobInformation = ({ jobInformation }: JobInformationProps) => {
     return (
-        <Card className='grid w-full grid-cols-5 shadow-xl'>
-            <CardTitle className='col-span-1 flex w-full flex-col items-start rounded-l-xl bg-primaryColor p-4 text-lg text-white'>
-                <Briefcase className='mb-2 mr-auto inline h-10 w-10 text-secondaryColor' />
+        <Card className='mb-6 w-full shadow-xl lg:w-[calc(50%-0.75rem)]'>
+            <CardTitle className='text-md flex w-full flex-row items-center justify-start rounded-t-xl p-6 py-4 text-lg text-black'>
+                <Briefcase className='mr-2 inline h-6 w-6 text-primaryColor' />
                 Job Info
             </CardTitle>
-            <CardContent className='col-span-4 grid w-full grid-cols-2 gap-4 p-6'>
-                <div className='col-span-1'>
-                    <div className='text-md font-semibold'>First Name</div>
+            <CardContent className='grid w-full grid-cols-2 gap-4 p-6 pt-0'>
+                <div className='col-span-2 md:col-span-1'>
+                    <div className='text-md font-semibold'>Company</div>
                     <Input
                         className='w-full font-medium text-gray-500'
                         readOnly
                         defaultValue={jobInformation?.company || ''}
                     />
                 </div>
-                <div className='col-span-1'>
-                    <div className='text-md font-semibold'>Last Name</div>
+                <div className='col-span-2 md:col-span-1'>
+                    <div className='text-md font-semibold'>Title/Position</div>
                     <Input
                         className='w-full font-medium text-gray-500'
                         readOnly
@@ -37,15 +37,17 @@ const JobInformation = ({ jobInformation }: JobInformationProps) => {
                     />
                 </div>
                 <div className='col-span-2'>
-                    <div className='text-md font-semibold'>Full Name</div>
+                    <div className='text-md font-semibold'>Work Email</div>
                     <Input
                         className='w-full font-medium text-gray-500'
                         readOnly
                         defaultValue={jobInformation?.workEmail || ''}
                     />
                 </div>
-                <div className='col-span-1'>
-                    <div className='text-md font-semibold'>Gender</div>
+                <div className='col-span-2 md:col-span-1'>
+                    <div className='text-md font-semibold'>
+                        Work Phone Number
+                    </div>
                     <Input
                         className='w-full font-medium text-gray-500'
                         readOnly
@@ -73,7 +75,12 @@ const JobInformation = ({ jobInformation }: JobInformationProps) => {
                             </div>
                         </div>
                         <div className='w-full'>
-                            <div>{jobInformation?.workAddress?.state}</div>
+                            <div>
+                                {jobInformation?.workAddress?.state.replace(
+                                    /_/g,
+                                    ' '
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>

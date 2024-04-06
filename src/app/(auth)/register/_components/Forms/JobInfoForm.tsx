@@ -382,7 +382,7 @@ const JobInfoForm = ({ formId, nextStep }: JobInfoFormProps) => {
                                                 value={state}
                                                 key={nanoid()}
                                             >
-                                                {state}
+                                                {state.replace(/_/g, ' ')}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>

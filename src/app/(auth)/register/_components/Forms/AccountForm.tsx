@@ -119,7 +119,7 @@ const AccountForm = ({ formId }: AccountFormProps) => {
             const {
                 firstName,
                 lastName,
-                fullName,
+                // fullName,
                 gender,
                 dob,
                 phoneNumber,
@@ -133,17 +133,18 @@ const AccountForm = ({ formId }: AccountFormProps) => {
                 workPhone,
                 ...workAddress
             } = jobInfo
+            const fullName = `${firstName} ${lastName}`
 
             const payload: RegistationPayload = {
-                customRegisterInput: {
+                input: {
                     username,
                     email,
                     password,
                     data: {
+                        fullName,
                         personalDetails: {
                             firstName,
                             lastName,
-                            fullName,
                             gender: gender as Enum_Componentparticipantpersonaldetails_Gender,
                             dob: (dob && format(dob, 'yyyy-MM-dd')) || '',
                             phoneNumber,
@@ -167,8 +168,14 @@ const AccountForm = ({ formId }: AccountFormProps) => {
                 },
             }
             setIsSubmitting(true)
+            console.log('payload', payload)
             const { status, message } = await registrationHandler(payload)
             if (status) {
+                toast({
+                    variant: 'default',
+                    title: 'Registration Success',
+                    description: 'Successfully created an account!',
+                })
                 router.replace('/profile')
             } else {
                 toast({
@@ -204,7 +211,7 @@ const AccountForm = ({ formId }: AccountFormProps) => {
                         id={ACCOUNT_FIELDS.EMAIL}
                         placeholder='Enter your personal email address'
                         error={!!errors.email}
-                        onChange={debounce(confirmPasswordOnChange, 1000)}
+                        onChange={debounce(emailOnChange, 1000)}
                         {...emailFormProps}
                     />
                     <ErrorFieldMessage message={errors.email?.message} />

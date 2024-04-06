@@ -1,5 +1,5 @@
-import { ExitIcon } from '@radix-ui/react-icons'
-import { getSessionData } from '@/actions'
+'use client'
+import { ExitIcon, PersonIcon } from '@radix-ui/react-icons'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
     DropdownMenu,
@@ -9,7 +9,7 @@ import {
     DropdownMenuShortcut,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import React from 'react'
+import React, { useState } from 'react'
 import {
     Dialog,
     DialogContent,
@@ -20,17 +20,48 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog'
 import LogoutButton from './LogoutButton'
+import { useDashboardRootLayoutStore } from '../../_stores/DashboardRootLayoutStore'
+import { Session } from '@/types'
+import { Menu, TrainTrack } from 'lucide-react'
+import {
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetFooter,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from '@/components/ui/sheet'
+import { nanoid } from 'nanoid'
+import NavItem from '../Drawer/NavItem'
+import { PTLCC } from '@/components/svgs'
+import { useMedia } from 'react-use'
 
 interface HeaderProps {
-    drawerWidth: number
-    headerHeight: number
+    session?: Session
 }
 
-const Header = async ({ drawerWidth, headerHeight }: HeaderProps) => {
-    const { data: session } = await getSessionData()
+const Header = ({ session }: HeaderProps) => {
+    const { drawerWidth, headerHeight } = useDashboardRootLayoutStore()
+    const isLg = useMedia('only screen and (min-width: 1024px)', false)
+    const [open, setOpen] = useState(false)
+
+    const navItemList = [
+        {
+            title: 'User',
+            Icon: <PersonIcon className='inline h-6 w-6' />,
+            route: '/profile',
+        },
+        {
+            title: 'Training',
+            Icon: <TrainTrack className='inline h-6 w-6' />,
+            route: '/training',
+        },
+    ]
+
     return (
         <div
-            className={`sticky top-0 z-10 w-full border border-x-0 border-slate-200 bg-white`}
+            className={`sticky top-0 z-10 w-full border border-x-0 border-slate-200 bg-white transition-all duration-300 ease-out`}
             style={{
                 width: `calc(100% - ${drawerWidth}rem)`,
                 height: `${headerHeight}rem`,
@@ -38,6 +69,44 @@ const Header = async ({ drawerWidth, headerHeight }: HeaderProps) => {
             }}
         >
             <div className='flex h-full w-full flex-row items-center p-4'>
+                {!isLg && (
+                    <Sheet open={open} onOpenChange={setOpen}>
+                        <SheetTrigger asChild>
+                            <Menu className='mr-2 block cursor-pointer lg:hidden' />
+                        </SheetTrigger>
+                        <SheetContent
+                            side={'left'}
+                            className='!max-w-[16rem] border-0 bg-primaryColor px-0'
+                        >
+                            <SheetHeader className='items-start justify-center px-6'>
+                                <SheetTitle className='text-white'>
+                                    PTLCC Dashboard
+                                </SheetTitle>
+                                <SheetDescription className='!mt-0'>
+                                    {session?.user.email}
+                                </SheetDescription>
+                            </SheetHeader>
+                            <div className='flex h-full w-full flex-col items-start justify-start px-4 pt-5 transition-all duration-300 ease-out'>
+                                <div className='flex w-full flex-col gap-1'>
+                                    {navItemList.map(props => (
+                                        <NavItem
+                                            key={nanoid()}
+                                            mobile
+                                            setOpen={setOpen}
+                                            {...props}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        </SheetContent>
+                    </Sheet>
+                )}
+                <div className='mr-auto w-24 items-center'>
+                    <PTLCC
+                        className='h-[55px] w-full'
+                        viewBox='350 350 900 900'
+                    />
+                </div>
                 <Dialog>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>

@@ -81,24 +81,78 @@ export type ComponentCommonAddressInput = {
   state?: InputMaybe<Enum_Componentcommonaddress_State>;
 };
 
-export type ComponentCommonTrainingItems = {
-  __typename?: 'ComponentCommonTrainingItems';
-  certificate: UploadFileEntityResponse;
+export type ComponentCommonCertificate = {
+  __typename?: 'ComponentCommonCertificate';
   id: Scalars['ID']['output'];
-  training?: Maybe<TrainingEntityResponse>;
+  issuedDate?: Maybe<Scalars['Date']['output']>;
+  validityPeriod?: Maybe<Scalars['Int']['output']>;
 };
 
-export type ComponentCommonTrainingItemsFiltersInput = {
-  and?: InputMaybe<Array<InputMaybe<ComponentCommonTrainingItemsFiltersInput>>>;
-  not?: InputMaybe<ComponentCommonTrainingItemsFiltersInput>;
-  or?: InputMaybe<Array<InputMaybe<ComponentCommonTrainingItemsFiltersInput>>>;
-  training?: InputMaybe<TrainingFiltersInput>;
+export type ComponentCommonCertificateFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<ComponentCommonCertificateFiltersInput>>>;
+  issuedDate?: InputMaybe<DateFilterInput>;
+  not?: InputMaybe<ComponentCommonCertificateFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<ComponentCommonCertificateFiltersInput>>>;
+  validityPeriod?: InputMaybe<IntFilterInput>;
 };
 
-export type ComponentCommonTrainingItemsInput = {
-  certificate?: InputMaybe<Scalars['ID']['input']>;
+export type ComponentCommonCertificateInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
-  training?: InputMaybe<Scalars['ID']['input']>;
+  issuedDate?: InputMaybe<Scalars['Date']['input']>;
+  validityPeriod?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type ComponentCommonTrainingParticipants = {
+  __typename?: 'ComponentCommonTrainingParticipants';
+  Certificate?: Maybe<UploadFileEntityResponse>;
+  id: Scalars['ID']['output'];
+  participant?: Maybe<ParticipantEntityResponse>;
+};
+
+export type ComponentCommonTrainingParticipantsFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<ComponentCommonTrainingParticipantsFiltersInput>>>;
+  identifier?: InputMaybe<StringFilterInput>;
+  not?: InputMaybe<ComponentCommonTrainingParticipantsFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<ComponentCommonTrainingParticipantsFiltersInput>>>;
+  participant?: InputMaybe<ParticipantFiltersInput>;
+};
+
+export type ComponentCommonTrainingParticipantsInput = {
+  Certificate?: InputMaybe<Scalars['ID']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  identifier?: InputMaybe<Scalars['String']['input']>;
+  participant?: InputMaybe<Scalars['ID']['input']>;
+};
+
+export type ComponentCommonTrainingSession = {
+  __typename?: 'ComponentCommonTrainingSession';
+  Participants?: Maybe<Array<Maybe<ComponentCommonTrainingParticipants>>>;
+  certificateInfo?: Maybe<ComponentCommonCertificate>;
+  date?: Maybe<Scalars['Date']['output']>;
+  id: Scalars['ID']['output'];
+};
+
+
+export type ComponentCommonTrainingSessionParticipantsArgs = {
+  filters?: InputMaybe<ComponentCommonTrainingParticipantsFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
+export type ComponentCommonTrainingSessionFiltersInput = {
+  Participants?: InputMaybe<ComponentCommonTrainingParticipantsFiltersInput>;
+  and?: InputMaybe<Array<InputMaybe<ComponentCommonTrainingSessionFiltersInput>>>;
+  certificateInfo?: InputMaybe<ComponentCommonCertificateFiltersInput>;
+  date?: InputMaybe<DateFilterInput>;
+  not?: InputMaybe<ComponentCommonTrainingSessionFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<ComponentCommonTrainingSessionFiltersInput>>>;
+};
+
+export type ComponentCommonTrainingSessionInput = {
+  Participants?: InputMaybe<Array<InputMaybe<ComponentCommonTrainingParticipantsInput>>>;
+  certificateInfo?: InputMaybe<ComponentCommonCertificateInput>;
+  date?: InputMaybe<Scalars['Date']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type ComponentParticipantJobInformation = {
@@ -135,7 +189,6 @@ export type ComponentParticipantPersonalDetails = {
   __typename?: 'ComponentParticipantPersonalDetails';
   dob?: Maybe<Scalars['Date']['output']>;
   firstName?: Maybe<Scalars['String']['output']>;
-  fullName?: Maybe<Scalars['String']['output']>;
   gender?: Maybe<Enum_Componentparticipantpersonaldetails_Gender>;
   homeNumber?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
@@ -148,7 +201,6 @@ export type ComponentParticipantPersonalDetailsFiltersInput = {
   and?: InputMaybe<Array<InputMaybe<ComponentParticipantPersonalDetailsFiltersInput>>>;
   dob?: InputMaybe<DateFilterInput>;
   firstName?: InputMaybe<StringFilterInput>;
-  fullName?: InputMaybe<StringFilterInput>;
   gender?: InputMaybe<StringFilterInput>;
   homeNumber?: InputMaybe<StringFilterInput>;
   lastName?: InputMaybe<StringFilterInput>;
@@ -161,7 +213,6 @@ export type ComponentParticipantPersonalDetailsFiltersInput = {
 export type ComponentParticipantPersonalDetailsInput = {
   dob?: InputMaybe<Scalars['Date']['input']>;
   firstName?: InputMaybe<Scalars['String']['input']>;
-  fullName?: InputMaybe<Scalars['String']['input']>;
   gender?: InputMaybe<Enum_Componentparticipantpersonaldetails_Gender>;
   homeNumber?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
@@ -354,9 +405,8 @@ export enum Enum_Contentreleasesreleaseaction_Type {
 }
 
 export enum Enum_Training_Type {
-  TypeI = 'Type_I',
-  TypeIi = 'Type_II',
-  TypeIii = 'Type_III'
+  Laboratory = 'Laboratory',
+  LaboratoryCompetency = 'Laboratory_Competency'
 }
 
 export type FileInfoInput = {
@@ -390,7 +440,7 @@ export type FloatFilterInput = {
   startsWith?: InputMaybe<Scalars['Float']['input']>;
 };
 
-export type GenericMorph = ComponentCommonAddress | ComponentCommonTrainingItems | ComponentParticipantJobInformation | ComponentParticipantPersonalDetails | ContentReleasesRelease | ContentReleasesReleaseAction | I18NLocale | Participant | Training | UploadFile | UploadFolder | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser;
+export type GenericMorph = ComponentCommonAddress | ComponentCommonCertificate | ComponentCommonTrainingParticipants | ComponentCommonTrainingSession | ComponentParticipantJobInformation | ComponentParticipantPersonalDetails | ContentReleasesRelease | ContentReleasesReleaseAction | I18NLocale | Participant | SlugifySlug | Training | UploadFile | UploadFolder | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser;
 
 export type I18NLocale = {
   __typename?: 'I18NLocale';
@@ -535,6 +585,7 @@ export type Mutation = {
   createContentReleasesRelease?: Maybe<ContentReleasesReleaseEntityResponse>;
   createContentReleasesReleaseAction?: Maybe<ContentReleasesReleaseActionEntityResponse>;
   createParticipant?: Maybe<ParticipantEntityResponse>;
+  createSlugifySlug?: Maybe<SlugifySlugEntityResponse>;
   createTraining?: Maybe<TrainingEntityResponse>;
   createUploadFile?: Maybe<UploadFileEntityResponse>;
   createUploadFolder?: Maybe<UploadFolderEntityResponse>;
@@ -542,10 +593,10 @@ export type Mutation = {
   createUsersPermissionsRole?: Maybe<UsersPermissionsCreateRolePayload>;
   /** Create a new user */
   createUsersPermissionsUser: UsersPermissionsUserEntityResponse;
-  customRegister: UsersPermissionsLoginPayload;
   deleteContentReleasesRelease?: Maybe<ContentReleasesReleaseEntityResponse>;
   deleteContentReleasesReleaseAction?: Maybe<ContentReleasesReleaseActionEntityResponse>;
   deleteParticipant?: Maybe<ParticipantEntityResponse>;
+  deleteSlugifySlug?: Maybe<SlugifySlugEntityResponse>;
   deleteTraining?: Maybe<TrainingEntityResponse>;
   deleteUploadFile?: Maybe<UploadFileEntityResponse>;
   deleteUploadFolder?: Maybe<UploadFolderEntityResponse>;
@@ -568,6 +619,7 @@ export type Mutation = {
   updateContentReleasesReleaseAction?: Maybe<ContentReleasesReleaseActionEntityResponse>;
   updateFileInfo: UploadFileEntityResponse;
   updateParticipant?: Maybe<ParticipantEntityResponse>;
+  updateSlugifySlug?: Maybe<SlugifySlugEntityResponse>;
   updateTraining?: Maybe<TrainingEntityResponse>;
   updateUploadFile?: Maybe<UploadFileEntityResponse>;
   updateUploadFolder?: Maybe<UploadFolderEntityResponse>;
@@ -601,6 +653,11 @@ export type MutationCreateParticipantArgs = {
 };
 
 
+export type MutationCreateSlugifySlugArgs = {
+  data: SlugifySlugInput;
+};
+
+
 export type MutationCreateTrainingArgs = {
   data: TrainingInput;
 };
@@ -626,11 +683,6 @@ export type MutationCreateUsersPermissionsUserArgs = {
 };
 
 
-export type MutationCustomRegisterArgs = {
-  input: UsersPermissionsRegisterInput;
-};
-
-
 export type MutationDeleteContentReleasesReleaseArgs = {
   id: Scalars['ID']['input'];
 };
@@ -642,6 +694,11 @@ export type MutationDeleteContentReleasesReleaseActionArgs = {
 
 
 export type MutationDeleteParticipantArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteSlugifySlugArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -735,6 +792,12 @@ export type MutationUpdateParticipantArgs = {
 };
 
 
+export type MutationUpdateSlugifySlugArgs = {
+  data: SlugifySlugInput;
+  id: Scalars['ID']['input'];
+};
+
+
 export type MutationUpdateTrainingArgs = {
   data: TrainingInput;
   id: Scalars['ID']['input'];
@@ -792,17 +855,10 @@ export type Participant = {
   __typename?: 'Participant';
   auth?: Maybe<UsersPermissionsUserEntityResponse>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
+  fullName?: Maybe<Scalars['String']['output']>;
   jobInformation?: Maybe<ComponentParticipantJobInformation>;
   personalDetails?: Maybe<ComponentParticipantPersonalDetails>;
-  trainings?: Maybe<Array<Maybe<ComponentCommonTrainingItems>>>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
-};
-
-
-export type ParticipantTrainingsArgs = {
-  filters?: InputMaybe<ComponentCommonTrainingItemsFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 export type ParticipantEntity = {
@@ -826,20 +882,20 @@ export type ParticipantFiltersInput = {
   and?: InputMaybe<Array<InputMaybe<ParticipantFiltersInput>>>;
   auth?: InputMaybe<UsersPermissionsUserFiltersInput>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
+  fullName?: InputMaybe<StringFilterInput>;
   id?: InputMaybe<IdFilterInput>;
   jobInformation?: InputMaybe<ComponentParticipantJobInformationFiltersInput>;
   not?: InputMaybe<ParticipantFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<ParticipantFiltersInput>>>;
   personalDetails?: InputMaybe<ComponentParticipantPersonalDetailsFiltersInput>;
-  trainings?: InputMaybe<ComponentCommonTrainingItemsFiltersInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
 };
 
 export type ParticipantInput = {
   auth?: InputMaybe<Scalars['ID']['input']>;
+  fullName?: InputMaybe<Scalars['String']['input']>;
   jobInformation?: InputMaybe<ComponentParticipantJobInformationInput>;
   personalDetails?: InputMaybe<ComponentParticipantPersonalDetailsInput>;
-  trainings?: InputMaybe<Array<InputMaybe<ComponentCommonTrainingItemsInput>>>;
 };
 
 export type Query = {
@@ -853,6 +909,8 @@ export type Query = {
   me?: Maybe<UsersPermissionsMe>;
   participant?: Maybe<ParticipantEntityResponse>;
   participants?: Maybe<ParticipantEntityResponseCollection>;
+  slugifySlug?: Maybe<SlugifySlugEntityResponse>;
+  slugifySlugs?: Maybe<SlugifySlugEntityResponseCollection>;
   training?: Maybe<TrainingEntityResponse>;
   trainings?: Maybe<TrainingEntityResponseCollection>;
   uploadFile?: Maybe<UploadFileEntityResponse>;
@@ -909,6 +967,18 @@ export type QueryParticipantArgs = {
 
 export type QueryParticipantsArgs = {
   filters?: InputMaybe<ParticipantFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
+
+export type QuerySlugifySlugArgs = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+};
+
+
+export type QuerySlugifySlugsArgs = {
+  filters?: InputMaybe<SlugifySlugFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
@@ -978,6 +1048,47 @@ export type ResponseCollectionMeta = {
   pagination: Pagination;
 };
 
+export type SlugifySlug = {
+  __typename?: 'SlugifySlug';
+  count?: Maybe<Scalars['Int']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  slug?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type SlugifySlugEntity = {
+  __typename?: 'SlugifySlugEntity';
+  attributes?: Maybe<SlugifySlug>;
+  id?: Maybe<Scalars['ID']['output']>;
+};
+
+export type SlugifySlugEntityResponse = {
+  __typename?: 'SlugifySlugEntityResponse';
+  data?: Maybe<SlugifySlugEntity>;
+};
+
+export type SlugifySlugEntityResponseCollection = {
+  __typename?: 'SlugifySlugEntityResponseCollection';
+  data: Array<SlugifySlugEntity>;
+  meta: ResponseCollectionMeta;
+};
+
+export type SlugifySlugFiltersInput = {
+  and?: InputMaybe<Array<InputMaybe<SlugifySlugFiltersInput>>>;
+  count?: InputMaybe<IntFilterInput>;
+  createdAt?: InputMaybe<DateTimeFilterInput>;
+  id?: InputMaybe<IdFilterInput>;
+  not?: InputMaybe<SlugifySlugFiltersInput>;
+  or?: InputMaybe<Array<InputMaybe<SlugifySlugFiltersInput>>>;
+  slug?: InputMaybe<StringFilterInput>;
+  updatedAt?: InputMaybe<DateTimeFilterInput>;
+};
+
+export type SlugifySlugInput = {
+  count?: InputMaybe<Scalars['Int']['input']>;
+  slug?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type StringFilterInput = {
   and?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   between?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
@@ -1005,12 +1116,19 @@ export type StringFilterInput = {
 
 export type Training = {
   __typename?: 'Training';
+  Sessions?: Maybe<Array<Maybe<ComponentCommonTrainingSession>>>;
   code: Scalars['String']['output'];
   createdAt?: Maybe<Scalars['DateTime']['output']>;
-  dateValidity?: Maybe<Scalars['Date']['output']>;
   name: Scalars['String']['output'];
-  type: Enum_Training_Type;
+  type?: Maybe<Enum_Training_Type>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
+
+export type TrainingSessionsArgs = {
+  filters?: InputMaybe<ComponentCommonTrainingSessionFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 export type TrainingEntity = {
@@ -1031,10 +1149,10 @@ export type TrainingEntityResponseCollection = {
 };
 
 export type TrainingFiltersInput = {
+  Sessions?: InputMaybe<ComponentCommonTrainingSessionFiltersInput>;
   and?: InputMaybe<Array<InputMaybe<TrainingFiltersInput>>>;
   code?: InputMaybe<StringFilterInput>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
-  dateValidity?: InputMaybe<DateFilterInput>;
   id?: InputMaybe<IdFilterInput>;
   name?: InputMaybe<StringFilterInput>;
   not?: InputMaybe<TrainingFiltersInput>;
@@ -1044,8 +1162,8 @@ export type TrainingFiltersInput = {
 };
 
 export type TrainingInput = {
+  Sessions?: InputMaybe<Array<InputMaybe<ComponentCommonTrainingSessionInput>>>;
   code?: InputMaybe<Scalars['String']['input']>;
-  dateValidity?: InputMaybe<Scalars['Date']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<Enum_Training_Type>;
 };
@@ -1434,6 +1552,13 @@ export type CreateParticipantMutationVariables = Exact<{
 
 export type CreateParticipantMutation = { __typename?: 'Mutation', createParticipant?: { __typename?: 'ParticipantEntityResponse', data?: { __typename?: 'ParticipantEntity', id?: string | null } | null } | null };
 
+export type ForgotPasswordMutationVariables = Exact<{
+  email: Scalars['String']['input'];
+}>;
+
+
+export type ForgotPasswordMutation = { __typename?: 'Mutation', forgotPassword?: { __typename?: 'UsersPermissionsPasswordPayload', ok: boolean } | null };
+
 export type LoginMutationVariables = Exact<{
   input: UsersPermissionsLoginInput;
 }>;
@@ -1442,11 +1567,20 @@ export type LoginMutationVariables = Exact<{
 export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UsersPermissionsLoginPayload', jwt?: string | null, user: { __typename?: 'UsersPermissionsMe', id: string, email?: string | null, username: string } } };
 
 export type RegisterMutationVariables = Exact<{
-  customRegisterInput: UsersPermissionsRegisterInput;
+  input: UsersPermissionsRegisterInput;
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', customRegister: { __typename?: 'UsersPermissionsLoginPayload', jwt?: string | null, user: { __typename?: 'UsersPermissionsMe', username: string, email?: string | null, id: string } } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UsersPermissionsLoginPayload', jwt?: string | null, user: { __typename?: 'UsersPermissionsMe', username: string, email?: string | null, id: string } } };
+
+export type ResetPasswordMutationVariables = Exact<{
+  password: Scalars['String']['input'];
+  passwordConfirmation: Scalars['String']['input'];
+  code: Scalars['String']['input'];
+}>;
+
+
+export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword?: { __typename?: 'UsersPermissionsLoginPayload', user: { __typename?: 'UsersPermissionsMe', email?: string | null } } | null };
 
 export type CheckEmailExistsQueryVariables = Exact<{
   email: Scalars['String']['input'];
@@ -1455,24 +1589,37 @@ export type CheckEmailExistsQueryVariables = Exact<{
 
 export type CheckEmailExistsQuery = { __typename?: 'Query', usersPermissionsUsers?: { __typename?: 'UsersPermissionsUserEntityResponseCollection', data: Array<{ __typename?: 'UsersPermissionsUserEntity', attributes?: { __typename?: 'UsersPermissionsUser', email: string } | null }> } | null };
 
+export type CheckUsernameExistsQueryVariables = Exact<{
+  username: Scalars['String']['input'];
+}>;
+
+
+export type CheckUsernameExistsQuery = { __typename?: 'Query', usersPermissionsUsers?: { __typename?: 'UsersPermissionsUserEntityResponseCollection', data: Array<{ __typename?: 'UsersPermissionsUserEntity', attributes?: { __typename?: 'UsersPermissionsUser', username: string } | null }> } | null };
+
 export type GetProfileQueryVariables = Exact<{
   usersPermissionsUserId?: InputMaybe<Scalars['ID']['input']>;
 }>;
 
 
-export type GetProfileQuery = { __typename?: 'Query', usersPermissionsUser?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', attributes?: { __typename?: 'UsersPermissionsUser', participant?: { __typename?: 'ParticipantEntityResponse', data?: { __typename?: 'ParticipantEntity', attributes?: { __typename?: 'Participant', personalDetails?: { __typename?: 'ComponentParticipantPersonalDetails', firstName?: string | null, lastName?: string | null, fullName?: string | null, gender?: Enum_Componentparticipantpersonaldetails_Gender | null, dob?: any | null, homeNumber?: string | null, phoneNumber?: string | null, residentialAddress?: { __typename?: 'ComponentCommonAddress', addressLine1?: string | null, addressLine2?: string | null, postalCode?: any | null, city?: string | null, state: Enum_Componentcommonaddress_State } | null } | null, jobInformation?: { __typename?: 'ComponentParticipantJobInformation', titlePosition?: string | null, company?: string | null, workEmail?: string | null, workPhone?: string | null, workAddress?: { __typename?: 'ComponentCommonAddress', addressLine1?: string | null, addressLine2?: string | null, postalCode?: any | null, city?: string | null, state: Enum_Componentcommonaddress_State } | null } | null } | null } | null } | null } | null } | null } | null };
+export type GetProfileQuery = { __typename?: 'Query', usersPermissionsUser?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', attributes?: { __typename?: 'UsersPermissionsUser', participant?: { __typename?: 'ParticipantEntityResponse', data?: { __typename?: 'ParticipantEntity', attributes?: { __typename?: 'Participant', personalDetails?: { __typename?: 'ComponentParticipantPersonalDetails', firstName?: string | null, lastName?: string | null, gender?: Enum_Componentparticipantpersonaldetails_Gender | null, dob?: any | null, homeNumber?: string | null, phoneNumber?: string | null, residentialAddress?: { __typename?: 'ComponentCommonAddress', addressLine1?: string | null, addressLine2?: string | null, postalCode?: any | null, city?: string | null, state: Enum_Componentcommonaddress_State } | null } | null, jobInformation?: { __typename?: 'ComponentParticipantJobInformation', titlePosition?: string | null, company?: string | null, workEmail?: string | null, workPhone?: string | null, workAddress?: { __typename?: 'ComponentCommonAddress', addressLine1?: string | null, addressLine2?: string | null, postalCode?: any | null, city?: string | null, state: Enum_Componentcommonaddress_State } | null } | null } | null } | null } | null } | null } | null } | null };
 
 export type GetUserTrainingQueryVariables = Exact<{
-  usersPermissionsUserId?: InputMaybe<Scalars['ID']['input']>;
+  filters?: InputMaybe<TrainingFiltersInput>;
+  sessionsFilters2?: InputMaybe<ComponentCommonTrainingSessionFiltersInput>;
+  participantsFilters2?: InputMaybe<ComponentCommonTrainingParticipantsFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
 }>;
 
 
-export type GetUserTrainingQuery = { __typename?: 'Query', usersPermissionsUser?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', attributes?: { __typename?: 'UsersPermissionsUser', participant?: { __typename?: 'ParticipantEntityResponse', data?: { __typename?: 'ParticipantEntity', attributes?: { __typename?: 'Participant', trainings?: Array<{ __typename?: 'ComponentCommonTrainingItems', training?: { __typename?: 'TrainingEntityResponse', data?: { __typename?: 'TrainingEntity', attributes?: { __typename?: 'Training', code: string, name: string, dateValidity?: any | null, type: Enum_Training_Type } | null } | null } | null, certificate: { __typename?: 'UploadFileEntityResponse', data?: { __typename?: 'UploadFileEntity', attributes?: { __typename?: 'UploadFile', name: string, size: number, url: string } | null } | null } } | null> | null } | null } | null } | null } | null } | null } | null };
+export type GetUserTrainingQuery = { __typename?: 'Query', trainings?: { __typename?: 'TrainingEntityResponseCollection', data: Array<{ __typename?: 'TrainingEntity', attributes?: { __typename?: 'Training', code: string, name: string, type?: Enum_Training_Type | null, Sessions?: Array<{ __typename?: 'ComponentCommonTrainingSession', date?: any | null, certificateInfo?: { __typename?: 'ComponentCommonCertificate', issuedDate?: any | null, validityPeriod?: number | null } | null, Participants?: Array<{ __typename?: 'ComponentCommonTrainingParticipants', Certificate?: { __typename?: 'UploadFileEntityResponse', data?: { __typename?: 'UploadFileEntity', attributes?: { __typename?: 'UploadFile', url: string, name: string } | null } | null } | null } | null> | null } | null> | null } | null }> } | null };
 
 
 export const CreateParticipantDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateParticipant"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ParticipantInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createParticipant"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"data"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<CreateParticipantMutation, CreateParticipantMutationVariables>;
+export const ForgotPasswordDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ForgotPassword"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"forgotPassword"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"}}]}}]}}]} as unknown as DocumentNode<ForgotPasswordMutation, ForgotPasswordMutationVariables>;
 export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UsersPermissionsLoginInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"jwt"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"username"}}]}}]}}]}}]} as unknown as DocumentNode<LoginMutation, LoginMutationVariables>;
-export const RegisterDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Register"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"customRegisterInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UsersPermissionsRegisterInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"customRegister"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"customRegisterInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"jwt"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<RegisterMutation, RegisterMutationVariables>;
+export const RegisterDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Register"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UsersPermissionsRegisterInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"register"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"jwt"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<RegisterMutation, RegisterMutationVariables>;
+export const ResetPasswordDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ResetPassword"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"passwordConfirmation"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"code"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"resetPassword"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}},{"kind":"Argument","name":{"kind":"Name","value":"passwordConfirmation"},"value":{"kind":"Variable","name":{"kind":"Name","value":"passwordConfirmation"}}},{"kind":"Argument","name":{"kind":"Name","value":"code"},"value":{"kind":"Variable","name":{"kind":"Name","value":"code"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}}]}}]}}]}}]} as unknown as DocumentNode<ResetPasswordMutation, ResetPasswordMutationVariables>;
 export const CheckEmailExistsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CheckEmailExists"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"usersPermissionsUsers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filters"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"email"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"data"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"attributes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}}]}}]}}]}}]}}]} as unknown as DocumentNode<CheckEmailExistsQuery, CheckEmailExistsQueryVariables>;
-export const GetProfileDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetProfile"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"usersPermissionsUserId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"usersPermissionsUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"usersPermissionsUserId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"data"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"attributes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"participant"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"data"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"attributes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"personalDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"gender"}},{"kind":"Field","name":{"kind":"Name","value":"dob"}},{"kind":"Field","name":{"kind":"Name","value":"residentialAddress"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addressLine1"}},{"kind":"Field","name":{"kind":"Name","value":"addressLine2"}},{"kind":"Field","name":{"kind":"Name","value":"postalCode"}},{"kind":"Field","name":{"kind":"Name","value":"city"}},{"kind":"Field","name":{"kind":"Name","value":"state"}}]}},{"kind":"Field","name":{"kind":"Name","value":"homeNumber"}},{"kind":"Field","name":{"kind":"Name","value":"phoneNumber"}}]}},{"kind":"Field","name":{"kind":"Name","value":"jobInformation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"titlePosition"}},{"kind":"Field","name":{"kind":"Name","value":"company"}},{"kind":"Field","name":{"kind":"Name","value":"workEmail"}},{"kind":"Field","name":{"kind":"Name","value":"workAddress"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addressLine1"}},{"kind":"Field","name":{"kind":"Name","value":"addressLine2"}},{"kind":"Field","name":{"kind":"Name","value":"postalCode"}},{"kind":"Field","name":{"kind":"Name","value":"city"}},{"kind":"Field","name":{"kind":"Name","value":"state"}}]}},{"kind":"Field","name":{"kind":"Name","value":"workPhone"}}]}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetProfileQuery, GetProfileQueryVariables>;
-export const GetUserTrainingDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUserTraining"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"usersPermissionsUserId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"usersPermissionsUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"usersPermissionsUserId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"data"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"attributes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"participant"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"data"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"attributes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"trainings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"training"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"data"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"attributes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"dateValidity"}},{"kind":"Field","name":{"kind":"Name","value":"type"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"certificate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"data"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"attributes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"size"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]}}]}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetUserTrainingQuery, GetUserTrainingQueryVariables>;
+export const CheckUsernameExistsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CheckUsernameExists"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"username"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"usersPermissionsUsers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filters"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"username"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"username"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"data"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"attributes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}}]}}]}}]}}]} as unknown as DocumentNode<CheckUsernameExistsQuery, CheckUsernameExistsQueryVariables>;
+export const GetProfileDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetProfile"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"usersPermissionsUserId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"usersPermissionsUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"usersPermissionsUserId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"data"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"attributes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"participant"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"data"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"attributes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"personalDetails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"gender"}},{"kind":"Field","name":{"kind":"Name","value":"dob"}},{"kind":"Field","name":{"kind":"Name","value":"residentialAddress"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addressLine1"}},{"kind":"Field","name":{"kind":"Name","value":"addressLine2"}},{"kind":"Field","name":{"kind":"Name","value":"postalCode"}},{"kind":"Field","name":{"kind":"Name","value":"city"}},{"kind":"Field","name":{"kind":"Name","value":"state"}}]}},{"kind":"Field","name":{"kind":"Name","value":"homeNumber"}},{"kind":"Field","name":{"kind":"Name","value":"phoneNumber"}}]}},{"kind":"Field","name":{"kind":"Name","value":"jobInformation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"titlePosition"}},{"kind":"Field","name":{"kind":"Name","value":"company"}},{"kind":"Field","name":{"kind":"Name","value":"workEmail"}},{"kind":"Field","name":{"kind":"Name","value":"workAddress"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addressLine1"}},{"kind":"Field","name":{"kind":"Name","value":"addressLine2"}},{"kind":"Field","name":{"kind":"Name","value":"postalCode"}},{"kind":"Field","name":{"kind":"Name","value":"city"}},{"kind":"Field","name":{"kind":"Name","value":"state"}}]}},{"kind":"Field","name":{"kind":"Name","value":"workPhone"}}]}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetProfileQuery, GetProfileQueryVariables>;
+export const GetUserTrainingDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUserTraining"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filters"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"TrainingFiltersInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sessionsFilters2"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ComponentCommonTrainingSessionFiltersInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"participantsFilters2"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ComponentCommonTrainingParticipantsFiltersInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"pagination"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"PaginationArg"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"trainings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filters"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filters"}}},{"kind":"Argument","name":{"kind":"Name","value":"pagination"},"value":{"kind":"Variable","name":{"kind":"Name","value":"pagination"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"data"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"attributes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Sessions"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filters"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sessionsFilters2"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"certificateInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"issuedDate"}},{"kind":"Field","name":{"kind":"Name","value":"validityPeriod"}}]}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"Participants"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filters"},"value":{"kind":"Variable","name":{"kind":"Name","value":"participantsFilters2"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Certificate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"data"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"attributes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetUserTrainingQuery, GetUserTrainingQueryVariables>;

@@ -11,7 +11,7 @@ const InternalServerError = (props: SVGProps<SVGSVGElement>) => (
     >
         <style>
             {
-                '.st1{fill:#6366f1}.st2{fill:#2a94f4}.st3{fill:#fff}.st4{fill:#0e538c}.st5{fill:#f7f7f7}.st6{fill:#0b4870;stroke:#fff;stroke-width:.5;stroke-miterlimit:10}.st7{fill:#f2f2f2}.st8{fill:#d3d3d3}.st9{fill:#ffb750}.st10{fill:#ffe3ca}.st12{fill:#fcd2b1}.st13{fill:#f2f0f0}.st14{fill:#fcbaa2}'
+                '.st1{fill:#6366f1}.st2{fill:#2a94f4}.st3{fill:#fff}.st4{fill:#0e538c}.st5{fill:#f7f7f7}.st6{fill:#0b4870;stroke:#fff;strokeWidth:.5;strokeMiterlimit:10}.st7{fill:#f2f2f2}.st8{fill:#d3d3d3}.st9{fill:#ffb750}.st10{fill:#ffe3ca}.st12{fill:#fcd2b1}.st13{fill:#f2f0f0}.st14{fill:#fcbaa2}'
             }
         </style>
         <g xmlns='http://www.w3.org/2000/svg'>

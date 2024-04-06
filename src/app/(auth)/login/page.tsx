@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card'
 
 import LoginForm from './_components/LoginForm'
 
-const LoginPage = async () => {
+const LoginPage = () => {
     const LoginContent = () => (
         <>
             <div className='mb-4 w-10/12 items-center'>
@@ -14,7 +14,7 @@ const LoginPage = async () => {
             </div>
 
             <h1 className='flex w-10/12 text-xl font-bold leading-none tracking-tight text-backgroundColor md:text-4xl'>
-                Sign in to PTLCC Training
+                Sign in to PTLCC
             </h1>
             <div className='items-cent mt-1 w-10/12'>
                 New participant?&nbsp;
