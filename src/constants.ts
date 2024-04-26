@@ -4,10 +4,9 @@ import { ToasterToast } from '@/hooks/useToast'
 //                                       STRAPI
 // =================================================================================================
 
-export const STRAPI_GRAPHQL_URL = 'http://192.168.0.2:1337/graphql'
-// 'https://ptlcc-training-strapi-backend.orb.local/graphql'
-export const STRAPI_GRAPHQL = 'http://192.168.0.2:1337'
-// export const STRAPI_GRAPHQL = 'https://ptlcc-training-strapi-backend.orb.local'
+export const STRAPI_GRAPHQL_URL =
+    process.env.NEXT_PUBLIC_STRAPI_GRAPHQL_URL || ''
+export const STRAPI_GRAPHQL = process.env.NEXT_PUBLIC_STRAPI_URL
 
 // =================================================================================================
 //                                       PERSONAL INFO FORM CONSTANTS
@@ -16,7 +15,6 @@ export const STRAPI_GRAPHQL = 'http://192.168.0.2:1337'
 export enum BASIC_INFO_FIELDS {
     FIRST_NAME = 'firstName',
     LAST_NAME = 'lastName',
-    // FULL_NAME = 'fullName',
     GENDER = 'gender',
     DOB = 'dob',
     PHONE_NUMBER = 'phoneNumber',
@@ -30,11 +28,6 @@ export enum RESIDENTIAL_ADDRESS_FIELDS {
     CITY = 'city',
     STATE = 'state',
 }
-
-// export enum GENDER {
-//     male = 'Male',
-//     female = 'Female',
-// }
 
 // =================================================================================================
 //                                       JOB INFO FORM CONSTANTS
