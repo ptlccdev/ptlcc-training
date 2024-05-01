@@ -210,7 +210,7 @@ const processColumn = (): ColumnDef<Unpacked<Trainings>>[] => {
                     <div className='flex flex-row items-center justify-center'>
                         <Badge variant={'outline'}>{start}</Badge>
                         <div className='mx-1'>-</div>
-                        <Badge variant={'outline'}>{start}</Badge>
+                        <Badge variant={'outline'}>{end}</Badge>
                     </div>
                 )
             },
