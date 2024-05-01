@@ -169,7 +169,6 @@ const processColumn = (): ColumnDef<Unpacked<Trainings>>[] => {
                         original?.certificate.validityPeriod
                     ),
                 })
-                console.log()
                 return (
                     <div className='flex items-center justify-center'>
                         <Badge

@@ -18,6 +18,9 @@ export async function getSessionData(): Promise<Payload<Session>> {
     try {
         const currentEncryptedSession = cookies().get(COOKIES.SESSION)?.value
 
+        if (!currentEncryptedSession) {
+            throw Error('No session found')
+        }
         const currentSession = JSON.parse(
             await decryptData(currentEncryptedSession!)
         )
@@ -44,7 +47,6 @@ export async function getSessionData(): Promise<Payload<Session>> {
 export async function registrationHandler({
     input,
 }: RegistationPayload): Promise<Payload<string>> {
-    console.log('variables', input)
     const { data, errors } = await getClient().mutate({
         mutation: Register,
         variables: {

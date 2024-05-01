@@ -141,3 +141,8 @@ export enum GENERIC_MESSAGE {
 
 export const HEADER_HEIGHT = 4
 export const DRAWER_WIDTH = 16
+
+export enum REQUEST_TYPE {
+    PUBLIC = 'public',
+    AUTHENTICATED = 'authenticated',
+}

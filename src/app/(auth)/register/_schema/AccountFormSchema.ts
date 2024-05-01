@@ -1,9 +1,14 @@
 import { z } from 'zod'
 import { passwordStrength } from 'check-password-strength'
 
-import { ACCOUNT_FIELDS, CUSTOM_FIELDS } from '@/constants'
+import { ACCOUNT_FIELDS, CUSTOM_FIELDS, REQUEST_TYPE } from '@/constants'
 import { simplify, manualFetchGraphQL } from '@/lib/utils'
 import { CheckEmailExists, CheckUsernameExists } from '@/graphql/queries'
+
+const validationCache = {
+    username: '',
+    email: '',
+}
 
 export const AccountFieldsSchema = z
     .object({
@@ -17,22 +22,40 @@ export const AccountFieldsSchema = z
                 'Username should only include letters, numbers, and underscores'
             )
             .refine(async value => {
-                const data = await manualFetchGraphQL(CheckUsernameExists, {
-                    username: value,
-                })
-                const { usersPermissionsUsers } = simplify(data)
-                return usersPermissionsUsers?.length === 0 ? true : false
+                if (validationCache.username !== value) {
+                    validationCache.username = value
+                    const data = await manualFetchGraphQL(
+                        CheckUsernameExists,
+                        {
+                            username: value,
+                        },
+                        REQUEST_TYPE.PUBLIC
+                    )
+                    const { usersPermissionsUsers } = simplify(data)
+                    return usersPermissionsUsers?.length === 0 ? true : false
+                } else {
+                    return true
+                }
             }, 'Username is already in use. Please register with a different username.'),
         [`${ACCOUNT_FIELDS.EMAIL}`]: z
             .string()
             .min(1, 'Please enter your personal email address')
             .email('Please enter a valid email')
             .refine(async value => {
-                const data = await manualFetchGraphQL(CheckEmailExists, {
-                    email: value,
-                })
-                const { usersPermissionsUsers } = simplify(data)
-                return usersPermissionsUsers?.length === 0 ? true : false
+                if (validationCache.email !== value) {
+                    validationCache.email = value
+                    const data = await manualFetchGraphQL(
+                        CheckEmailExists,
+                        {
+                            email: value,
+                        },
+                        REQUEST_TYPE.PUBLIC
+                    )
+                    const { usersPermissionsUsers } = simplify(data)
+                    return usersPermissionsUsers?.length === 0 ? true : false
+                } else {
+                    return true
+                }
             }, 'Email address is already in use. Please register with a different email or log in to your existing account.'),
         [`${ACCOUNT_FIELDS.PASSWORD}`]: z
             .string()
@@ -44,7 +67,8 @@ export const AccountFieldsSchema = z
             .min(1, 'Please confirm your password'),
         [`${CUSTOM_FIELDS.PASSWORD_STRENGTH}`]: z.string(),
     })
-    .superRefine(({ confirmPassword, password }, ctx) => {
+    .superRefine((values, ctx) => {
+        const { confirmPassword, password } = values
         if (confirmPassword !== password) {
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,

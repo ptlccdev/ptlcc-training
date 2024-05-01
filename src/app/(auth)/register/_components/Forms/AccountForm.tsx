@@ -8,8 +8,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { InputPassword } from '@/components/ui/inputPassword'
 import { ErrorFieldMessage } from '@/components/ui/errorFieldMessage'
-import { ACCOUNT_FIELDS, CUSTOM_FIELDS } from '@/constants'
-import { debounce } from '@/lib/utils'
+import { ACCOUNT_FIELDS, CUSTOM_FIELDS, REQUEST_TYPE } from '@/constants'
+import { debounce, manualFetchGraphQL, simplify } from '@/lib/utils'
 import { registrationHandler } from '@/actions'
 import { RegistationPayload } from '@/types'
 import {
@@ -20,6 +20,7 @@ import { useToast } from '@/hooks'
 
 import { useRegistrationFormStore } from '../../_store/RegistrationFromStore'
 import { AccountFieldsSchema, AccountFieldsSchemaType } from '../../_schema'
+import { CheckEmailExists } from '@/graphql/queries'
 
 interface AccountFormProps {
     formId: string
@@ -45,6 +46,7 @@ const AccountForm = ({ formId }: AccountFormProps) => {
         getValues,
         trigger,
         handleSubmit,
+        setError,
         formState: { errors, isValid },
     } = useForm<AccountFieldsSchemaType>({
         mode: 'all',
@@ -75,6 +77,9 @@ const AccountForm = ({ formId }: AccountFormProps) => {
         ).length > 0
     const { onChange: confirmPasswordOnChange, ...confirmPasswordFormProps } =
         register(ACCOUNT_FIELDS.CONFIRM_PASSWORD)
+    const { onChange: usernameOnChange, ...usernameFormProps } = register(
+        ACCOUNT_FIELDS.USERNAME
+    )
     const { onChange: emailOnChange, ...emailFormProps } = register(
         ACCOUNT_FIELDS.EMAIL
     )
@@ -119,7 +124,6 @@ const AccountForm = ({ formId }: AccountFormProps) => {
             const {
                 firstName,
                 lastName,
-                // fullName,
                 gender,
                 dob,
                 phoneNumber,
@@ -168,7 +172,6 @@ const AccountForm = ({ formId }: AccountFormProps) => {
                 },
             }
             setIsSubmitting(true)
-            console.log('payload', payload)
             const { status, message } = await registrationHandler(payload)
             if (status) {
                 toast({
@@ -201,7 +204,9 @@ const AccountForm = ({ formId }: AccountFormProps) => {
                         id={ACCOUNT_FIELDS.USERNAME}
                         placeholder='Enter your prefered username'
                         error={!!errors.username}
-                        {...register(ACCOUNT_FIELDS.USERNAME)}
+                        onChange={debounce(usernameOnChange, 1000)}
+                        {...usernameFormProps}
+                        // {...register(ACCOUNT_FIELDS.USERNAME)}
                     />
                     <ErrorFieldMessage message={errors.username?.message} />
                 </div>

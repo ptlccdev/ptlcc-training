@@ -18,7 +18,6 @@ const ResetPasswordPage = ({
 }: {
     searchParams: { code: string }
 }) => {
-    console.log('code', code)
     return (
         <div
             className='flex h-screen w-screen items-center justify-center'

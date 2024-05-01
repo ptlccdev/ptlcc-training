@@ -11,7 +11,10 @@ import { STRAPI_GRAPHQL_URL } from '../constants'
 import { getSessionData } from '@/actions'
 
 export const { getClient } = registerApolloClient(() => {
-    process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
+    if (process.env.NODE_ENV === 'development') {
+        process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
+    }
+
     const errorLink = onError(({ graphQLErrors, networkError }) => {
         if (graphQLErrors)
             graphQLErrors.forEach(({ message, locations, path }) =>

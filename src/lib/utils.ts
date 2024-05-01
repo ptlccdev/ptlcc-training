@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
-import { COOKIES, STRAPI_GRAPHQL_URL } from '@/constants'
+import { COOKIES, REQUEST_TYPE, STRAPI_GRAPHQL_URL } from '@/constants'
 import { print } from 'graphql'
 import type { DocumentNode, TypedDocumentNode } from '@apollo/client'
 import { Session } from '@/types'
@@ -63,11 +63,16 @@ export interface GraphQLResponse<T> {
 }
 export async function manualFetchGraphQL<V, TData>(
     rawQuery: DocumentNode | TypedDocumentNode<TData>,
-    variables: V | undefined
+    variables: V | undefined,
+    requestType: REQUEST_TYPE = REQUEST_TYPE.AUTHENTICATED
 ): Promise<TData> {
     const query = print(rawQuery)
-    const { data: session } = await getSessionData()
-    const token = session?.jwt
+    let token = null
+    if (requestType === REQUEST_TYPE.AUTHENTICATED) {
+        const { data: session } = await getSessionData()
+        token = session?.jwt
+    }
+
     const response = await fetch(STRAPI_GRAPHQL_URL, {
         method: 'POST',
         headers: {

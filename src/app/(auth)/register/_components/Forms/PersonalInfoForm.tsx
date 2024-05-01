@@ -169,7 +169,6 @@ const PersonalInfoForm = ({ formId, nextStep }: PersonalInfoFormProps) => {
     }
 
     const onSelectGender = (val: string) => {
-        console.log('wtf', val)
         setValue(BASIC_INFO_FIELDS.GENDER, val, { shouldValidate: true })
     }
     const onSelectState = (val: string) => {
