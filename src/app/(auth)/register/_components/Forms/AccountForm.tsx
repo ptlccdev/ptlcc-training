@@ -206,7 +206,6 @@ const AccountForm = ({ formId }: AccountFormProps) => {
                         error={!!errors.username}
                         onChange={debounce(usernameOnChange, 1000)}
                         {...usernameFormProps}
-                        // {...register(ACCOUNT_FIELDS.USERNAME)}
                     />
                     <ErrorFieldMessage message={errors.username?.message} />
                 </div>

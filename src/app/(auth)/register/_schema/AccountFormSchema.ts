@@ -5,9 +5,14 @@ import { ACCOUNT_FIELDS, CUSTOM_FIELDS, REQUEST_TYPE } from '@/constants'
 import { simplify, manualFetchGraphQL } from '@/lib/utils'
 import { CheckEmailExists, CheckUsernameExists } from '@/graphql/queries'
 
-const validationCache = {
-    username: '',
-    email: '',
+const prevUsername = {
+    value: '',
+    isValid: true,
+}
+
+const prevEmail = {
+    value: '',
+    isValid: true,
 }
 
 export const AccountFieldsSchema = z
@@ -22,8 +27,7 @@ export const AccountFieldsSchema = z
                 'Username should only include letters, numbers, and underscores'
             )
             .refine(async value => {
-                if (validationCache.username !== value) {
-                    validationCache.username = value
+                if (prevUsername.value !== value) {
                     const data = await manualFetchGraphQL(
                         CheckUsernameExists,
                         {
@@ -32,9 +36,11 @@ export const AccountFieldsSchema = z
                         REQUEST_TYPE.PUBLIC
                     )
                     const { usersPermissionsUsers } = simplify(data)
-                    return usersPermissionsUsers?.length === 0 ? true : false
+                    prevUsername.isValid =
+                        usersPermissionsUsers?.length === 0 ? true : false
+                    return prevUsername.isValid
                 } else {
-                    return true
+                    return prevUsername.isValid
                 }
             }, 'Username is already in use. Please register with a different username.'),
         [`${ACCOUNT_FIELDS.EMAIL}`]: z
@@ -42,8 +48,8 @@ export const AccountFieldsSchema = z
             .min(1, 'Please enter your personal email address')
             .email('Please enter a valid email')
             .refine(async value => {
-                if (validationCache.email !== value) {
-                    validationCache.email = value
+                if (prevEmail.value !== value) {
+                    prevEmail.value = value
                     const data = await manualFetchGraphQL(
                         CheckEmailExists,
                         {
@@ -52,9 +58,11 @@ export const AccountFieldsSchema = z
                         REQUEST_TYPE.PUBLIC
                     )
                     const { usersPermissionsUsers } = simplify(data)
-                    return usersPermissionsUsers?.length === 0 ? true : false
+                    prevEmail.isValid =
+                        usersPermissionsUsers?.length === 0 ? true : false
+                    return prevEmail.isValid
                 } else {
-                    return true
+                    return prevEmail.isValid
                 }
             }, 'Email address is already in use. Please register with a different email or log in to your existing account.'),
         [`${ACCOUNT_FIELDS.PASSWORD}`]: z
